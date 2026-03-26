@@ -1,0 +1,15 @@
+name: "Jira Productivity Squad"
+description: "Analisa dados do Jira e gera relatórios de produtividade em 3 visões: Diretoria, Gestão e Time."
+icon: "📊"
+performance_mode: "Econômico"
+
+skills:
+  - web_search
+  - web_fetch
+
+data:
+  - pipeline/data/research-brief.md
+  - pipeline/data/domain-framework.md
+  - pipeline/data/quality-criteria.md
+  - pipeline/data/output-examples.md
+  - pipeline/data/anti-patterns.md

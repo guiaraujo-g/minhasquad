@@ -1,0 +1,4 @@
+id,name,path
+analyst,Daniel Dados,./agents/analyst.agent.md
+writer,Tiago Texto,./agents/writer.agent.md
+reviewer,Rafael Revisão,./agents/reviewer.agent.md

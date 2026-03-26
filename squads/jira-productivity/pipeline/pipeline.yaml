@@ -1,0 +1,24 @@
+name: "Jira Productivity Pipeline"
+description: "Extrai dados do Jira e gera relatórios executivos, gerenciais e para o time."
+
+steps:
+  - id: step-01-checkpoint-params
+    file: steps/step-01-checkpoint-params.md
+    name: "Definir Parâmetros"
+  
+  - id: step-02-extract-data
+    file: steps/step-02-extract-data.md
+    name: "Extração e Análise de Dados"
+    
+  - id: step-03-write-reports
+    file: steps/step-03-write-reports.md
+    name: "Criação dos Relatórios"
+    
+  - id: step-04-review
+    file: steps/step-04-review.md
+    name: "Revisão de Qualidade"
+    on_reject: step-03-write-reports
+    
+  - id: step-05-checkpoint-approval
+    file: steps/step-05-checkpoint-approval.md
+    name: "Aprovação Final"
