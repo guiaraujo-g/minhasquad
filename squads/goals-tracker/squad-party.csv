@@ -1,0 +1,5 @@
+id,name,icon,role,path,execution,skills
+researcher,Rafael Relatório,📋,Coleta dados de metas e indicadores no Jira e em planilhas Google,./agents/researcher.agent.md,subagent,"jira,google-sheets"
+analyst,Alice Análise,📊,"Analisa dados, calcula RAG e identifica bloqueios e impedimentos",./agents/analyst.agent.md,inline,
+writer,Wagner Writer,✍️,Redige o Relatório de Liderança e o Relatório de Time,./agents/writer.agent.md,inline,
+reviewer,Renata Revisão,✅,Revisão leve unificada dos dois relatórios,./agents/reviewer.agent.md,inline,

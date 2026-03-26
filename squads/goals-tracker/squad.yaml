@@ -1,0 +1,24 @@
+name: "Goals Tracker Squad"
+code: "goals-tracker"
+description: >
+  Rastreia metas no Jira e no Google Sheets e gera dois relatórios complementares:
+  Relatório de Liderança (números-chave, status RAG, impedimentos com análise tipo Cinco Porquês)
+  e Relatório de Time (transparência, engajamento e reconhecimentos específicos).
+icon: "🎯"
+performance_mode: "Econômico"
+
+skills:
+  - jira
+  - google-sheets
+
+data:
+  - pipeline/data/research-brief.md
+  - pipeline/data/domain-framework.md
+  - pipeline/data/quality-criteria.md
+  - pipeline/data/output-examples.md
+  - pipeline/data/anti-patterns.md
+
+pipeline:
+  entry: pipeline/pipeline.yaml
+
+output_dir: output/

@@ -1,0 +1,70 @@
+name: "Goals Tracker Pipeline"
+version: "1.0.0"
+squad: "goals-tracker"
+
+description: >
+  Coleta metas no Jira e Google Sheets, analisa RAG e bloqueios, redige relatórios de liderança e de time,
+  com aprovação de conteúdo antes da revisão e aprovação final ao encerrar.
+
+mode: "Econômico"
+
+steps:
+  - id: step-01-research
+    name: "Pesquisa de Dados"
+    type: agent
+    agent: researcher
+    tasks:
+      - gather-goals-data
+    file: steps/step-01-research.md
+
+  - id: step-02-analyze
+    name: "Análise e RAG"
+    type: agent
+    agent: analyst
+    tasks:
+      - analyze-rag-and-blockers
+    file: steps/step-02-analyze.md
+    depends_on: step-01-research
+
+  - id: step-03-write
+    name: "Redação dos Relatórios"
+    type: agent
+    agent: writer
+    tasks:
+      - write-leadership-and-team-reports
+    file: steps/step-03-write.md
+    depends_on: step-02-analyze
+
+  - id: step-04-approve-content
+    name: "Aprovação de Conteúdo"
+    type: checkpoint
+    file: steps/step-04-approve-content.md
+    depends_on: step-03-write
+
+  - id: step-05-review
+    name: "Revisão dos Relatórios"
+    type: agent
+    agent: reviewer
+    optional: true
+    tasks:
+      - review-reports
+    file: steps/step-05-review.md
+    depends_on: step-04-approve-content
+
+  - id: step-06-final-approval
+    name: "Aprovação Final"
+    type: checkpoint
+    file: steps/step-06-final-approval.md
+    depends_on: step-05-review
+
+checkpoints:
+  - step-04-approve-content
+  - step-06-final-approval
+
+output:
+  artifacts:
+    - output/research-snapshot.md
+    - output/analysis-brief.md
+    - output/leadership-report.md
+    - output/team-report.md
+    - output/review-notes.md

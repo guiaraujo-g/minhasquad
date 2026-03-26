@@ -122,3 +122,6 @@ npx serve squads/<squad-name>/dashboard
 
 Para rodar a análise agora: digite /opensquad run jira-productivity
 Para ajustar algo no futuro: digite /opensquad edit jira-productivity
+
+
+/opensquad run goals-tracker

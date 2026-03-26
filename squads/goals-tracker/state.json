@@ -1,0 +1,47 @@
+{
+  "squad": "goals-tracker",
+  "status": "running",
+  "step": { "current": 6, "total": 6, "label": "step-06-final-approval" },
+  "agents": [
+    {
+      "id": "researcher",
+      "name": "Rafael Relatório",
+      "icon": "📋",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 1, "row": 1 }
+    },
+    {
+      "id": "analyst",
+      "name": "Alice Análise",
+      "icon": "📊",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 2, "row": 1 }
+    },
+    {
+      "id": "writer",
+      "name": "Wagner Writer",
+      "icon": "✍️",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 3, "row": 1 }
+    },
+    {
+      "id": "reviewer",
+      "name": "Renata Revisão",
+      "icon": "✅",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 1, "row": 2 }
+    }
+  ],
+  "handoff": {
+    "from": "reviewer",
+    "to": "user",
+    "message": "Revisão final concluída. Relatórios aprovados com nota 9.3/10.",
+    "completedAt": "2026-03-26T11:27:50Z"
+  },
+  "startedAt": "2026-03-26T11:27:00Z",
+  "updatedAt": "2026-03-26T11:27:50Z"
+}
