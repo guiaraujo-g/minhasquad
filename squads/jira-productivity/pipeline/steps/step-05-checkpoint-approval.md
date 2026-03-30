@@ -6,9 +6,11 @@ type: checkpoint
 
 Os relatórios de produtividade foram gerados e revisados com sucesso!
 
-Por favor, revise o resultado final em `squads/jira-productivity/output/final-reports.md`.
+Por favor, revise:
+- `squads/jira-productivity/output/final-reports.md` (texto das três visões)
+- **`squads/jira-productivity/output/dashboard-final.html`** (dashboard para navegador — **sempre** gerado neste run, mesmo diretório versionado que o markdown, com a **estrutura atual** definida em `pipeline/data/dashboard-layout-reference.html`)
 
-Se estiver tudo certo, você pode compartilhar os relatórios com os respectivos públicos (Diretoria, Gestão, Time).
+Se estiver tudo certo, você pode compartilhar os relatórios e o HTML com os respectivos públicos (Diretoria, Gestão, Time).
 
 O que deseja fazer?
 1. Aprovar e finalizar o pipeline.

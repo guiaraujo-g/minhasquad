@@ -13,3 +13,4 @@ data:
   - pipeline/data/quality-criteria.md
   - pipeline/data/output-examples.md
   - pipeline/data/anti-patterns.md
+  - pipeline/data/dashboard-layout-reference.html

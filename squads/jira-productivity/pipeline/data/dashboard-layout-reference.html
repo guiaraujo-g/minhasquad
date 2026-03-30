@@ -1,0 +1,678 @@
+<!DOCTYPE html><!-- Referência de layout para dashboard-final.html (métricas ilustrativas; substituir por dados do run). --><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Produtividade - Jira</title>
+    <style>
+        :root {
+            --primary-color: #0052CC; /* Atlassian Blue */
+            --secondary-color: #172B4D;
+            --bg-color: #F4F5F7;
+            --card-bg: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #6B778C;
+            --success: #36B37E;
+            --warning: #FFAB00;
+            --danger: #FF5630;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .report-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(9, 30, 66, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .report-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #DFE1E6;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trend-up { color: var(--success); font-size: 0.8em; }
+        .trend-down { color: var(--danger); font-size: 0.8em; }
+        .trend-warn { color: var(--warning); font-size: 0.8em; }
+
+        .highlight-box {
+            background-color: #E6FCFF;
+            border-left: 4px solid #00B8D9;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .action-box {
+            background-color: #FFF0B3;
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            background-color: var(--secondary-color);
+            color: white;
+            margin-right: 5px;
+        }
+        
+        .badge-warning { background-color: var(--warning); color: var(--secondary-color); }
+        .badge-danger { background-color: var(--danger); }
+        .badge-success { background-color: var(--success); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin-top: 15px; margin-bottom: 15px; }
+        th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #DFE1E6; }
+        th { color: var(--text-muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        tr:last-child td { border-bottom: none; font-weight: 600; }
+        .num { text-align: right; font-variant-numeric: tabular-nums; }
+        .bar-cell { width: 38%; min-width: 140px; }
+        .bar-track { height: 8px; background: #ebecf0; border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; background: #2684ff; border-radius: 4px; }
+
+        /* Estilos para a tabela pivot */
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #DFE1E6;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .table-pivot {
+            width: max-content;
+            min-width: 100%;
+            font-size: 0.82rem;
+        }
+        .table-pivot th:first-child,
+        .table-pivot td:first-child {
+            position: sticky;
+            left: 0;
+            background: var(--card-bg);
+            z-index: 1;
+            box-shadow: 1px 0 0 #DFE1E6;
+        }
+        .historico-pivot h3 {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #DFE1E6;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+
+    
+        details.report-collapsible { margin: 0; }
+        details.report-collapsible > summary.report-collapsible-summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0 10px;
+            margin: 0 0 14px;
+            border-bottom: 1px solid var(--border, #DFE1E6);
+        }
+        details.report-collapsible > summary::-webkit-details-marker { display: none; }
+        details.report-collapsible > summary::marker { content: ""; }
+        
+        
+        details.report-collapsible > summary.report-collapsible-summary h2 {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+    
+        /* Toggles CSS */
+        details.report-collapsible {
+            margin-bottom: 20px;
+        }
+        details.report-collapsible > summary.report-collapsible-summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border, #DFE1E6);
+        }
+        details.report-collapsible > summary.report-collapsible-summary::-webkit-details-marker {
+            display: none;
+        }
+        details.report-collapsible > summary.report-collapsible-summary::after {
+            content: '▼';
+            font-size: 0.8em;
+            margin-left: auto;
+            transition: transform 0.2s ease-in-out;
+            color: #6B778C;
+        }
+        details.report-collapsible[open] > summary.report-collapsible-summary::after {
+            transform: rotate(180deg);
+        }
+        details.report-collapsible > summary.report-collapsible-summary h2 {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .pivot-period-filter {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            padding: 14px 16px;
+            background: var(--bg-color);
+            border: 1px solid #DFE1E6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .pivot-period-filter label { color: var(--text-muted); margin-right: 6px; }
+        .pivot-period-filter select {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #DFE1E6;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+        .pivot-period-filter .hint { color: var(--text-muted); font-size: 0.82rem; flex: 1 1 100%; }
+        .chart-wrap {
+            position: relative;
+            height: 340px;
+            margin: 20px 0 28px;
+            max-width: 100%;
+        }
+        #sec-historico table.table-pivot th.pivot-col-hidden,
+        #sec-historico table.table-pivot td.pivot-col-hidden { display: none !important; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Análise de Produtividade - Jira</h1>
+        <p>Período: 12/03/2026 a 25/03/2026</p>
+    </header>
+
+    <!-- VISÃO DIRETORIA -->
+    <section class="report-section"><details open="" class="report-collapsible"><summary class="report-collapsible-summary"><h2>📊 1. Visão Diretoria (Relatório Executivo)</h2></summary>
+        
+        
+        <div class="highlight-box">
+            <strong>Resumo Executivo:</strong><br>
+            Neste ciclo, reduzimos significativamente a pressão de incidentes com um saldo positivo de 356 alertas resolvidos a mais do que criados. No entanto, observamos um gargalo sistêmico no fluxo de entregas, com grande parte do trabalho acumulado em etapas intermediárias antes da conclusão. Recomendamos focar na desobstrução dessas filas para garantir a previsibilidade dos prazos e estabilizar a experiência dos clientes.
+        </div>
+
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-label">Story Points alocados (sprint)</div>
+                <div class="metric-value">142</div>
+                <div class="metric-label">Soma de pontos no board da sprint atual · projetos INTS + IOAM</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tickets N3 resolvidos (time)</div>
+                <div class="metric-value">11</div>
+                <div class="metric-label">Somente tickets N3 resolvidos pelos membros do time de integrações (escopo squad)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Alertas criados</div>
+                <div class="metric-value">460</div>
+                <div class="metric-label">Total no período · projeto Alertas Integração (AL)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Alertas resolvidos</div>
+                <div class="metric-value">816</div>
+                <div class="metric-label">Total no período · projeto Alertas Integração (AL)</div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <strong>Recomendação Estratégica:</strong><br>
+            Priorizar a finalização de tarefas que já estão em andamento antes de iniciar novas, garantindo que o volume de trabalho não comprometa os prazos acordados com os clientes.
+        </div>
+    </details></section>
+
+    <!-- VISÃO GESTÃO -->
+    <section class="report-section"><details open="" class="report-collapsible"><summary class="report-collapsible-summary"><h2>⚙️ 2. Visão Gestão (Análise de Fluxo)</h2></summary>
+        
+        
+        <h3>Análise de Fluxo e Gargalos:</h3>
+        <ul>
+            <li><strong>Gargalo Identificado:</strong> Acúmulo de trabalho em estados anteriores à conclusão. Temos 54 pontos em Backlog e 26 pontos "Em andamento" para 97 pontos concluídos. Isso aponta para um gargalo de sistema no encadeamento das tarefas (ex: Code Review, Tarefas pendentes), e não um problema de conclusão isolada.</li>
+            <li><strong>Qualidade:</strong> O tempo médio de resolução de alertas "Media API" caiu de 70.7 dias (Fev/26) para 16.5 dias (Mar/26). O saldo do período é excelente (-356), com 816 alertas resolvidos e 460 criados.</li>
+            <li><strong>Histórico de Produtividade:</strong> Março/26 é o pico de Story Points no intervalo (301 SP), um aumento de 124% em relação a Fevereiro/26 (134 SP).</li>
+        </ul>
+
+        <div class="action-box">
+            <strong>Ação Recomendada:</strong><br>
+            Implementar limites de trabalho em progresso (WIP Limits) nas colunas de revisão e pendências para forçar o escoamento das tarefas paradas antes de puxar novos itens do backlog.
+        </div>
+
+        <h3>Produtividade vs meta (30 SP por pessoa)</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 0 12px;">Meta do time: <strong>30 story points por pessoa</strong> no período analisado (sprint ou janela do relatório — alinhar ao recorte do run). Barras = SP entregues/concluídos por pessoa; linha tracejada = meta.</p>
+        <div class="chart-wrap">
+            <canvas id="chartProdutividadeMeta30" aria-label="Gráfico de produtividade do time"></canvas>
+        </div>
+
+        <h3>Distribuição de Carga (Story Points)</h3>
+        <table>
+            <thead>
+              <tr><th>Responsável</th><th class="num">Total (SP)</th><th class="num">Peso %</th><th class="bar-cell"></th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Jonas Elan</td><td class="num">42</td><td class="num">23.73</td><td><div class="bar-track"><div class="bar-fill" style="width:23.73%"></div></div></td></tr>
+                <tr><td>Maria Eduarda da Silva Joaquim</td><td class="num">36</td><td class="num">20.34</td><td><div class="bar-track"><div class="bar-fill" style="width:20.34%"></div></div></td></tr>
+                <tr><td>Antonio Balardino</td><td class="num">34</td><td class="num">19.21</td><td><div class="bar-track"><div class="bar-fill" style="width:19.21%"></div></div></td></tr>
+                <tr><td>Adriel Henrique Borges Cochito</td><td class="num">28</td><td class="num">15.82</td><td><div class="bar-track"><div class="bar-fill" style="width:15.82%"></div></div></td></tr>
+                <tr><td>Bruna Elis Vogel</td><td class="num">27</td><td class="num">15.25</td><td><div class="bar-track"><div class="bar-fill" style="width:15.25%"></div></div></td></tr>
+                <tr><td>Daniel Cruz</td><td class="num">10</td><td class="num">5.65</td><td><div class="bar-track"><div class="bar-fill" style="width:5.65%"></div></div></td></tr>
+                <tr><td>Total</td><td class="num">177</td><td class="num">—</td><td></td></tr>
+            </tbody>
+        </table>
+    
+        <h3>Tickets N3 resolvidos pelo time (Período)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin: -6px 0 10px;">Apenas assignees do time de integrações; não inclui todo o volume N3 da empresa.</p>
+        <div class="table-scroll">
+            <table>
+        <thead>
+          <tr><th>Responsável</th><th class="num">Total</th><th class="num">Peso %</th><th class="bar-cell"></th></tr>
+        </thead>
+        <tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">2</td><td class="num">18.18</td><td><div class="bar-track"><div class="bar-fill" style="width:18.18%"></div></div></td></tr><tr><td>Bruna Elis Vogel</td><td class="num">1</td><td class="num">9.09</td><td><div class="bar-track"><div class="bar-fill" style="width:9.09%"></div></div></td></tr><tr><td>Daniel Cruz</td><td class="num">3</td><td class="num">27.27</td><td><div class="bar-track"><div class="bar-fill" style="width:27.27%"></div></div></td></tr><tr><td>Pedro Bittencourt</td><td class="num">2</td><td class="num">18.18</td><td><div class="bar-track"><div class="bar-fill" style="width:18.18%"></div></div></td></tr><tr><td>Wellington Casas</td><td class="num">3</td><td class="num">27.27</td><td><div class="bar-track"><div class="bar-fill" style="width:27.27%"></div></div></td></tr><tr><td>Total</td><td class="num">11</td><td class="num">—</td><td class="num"></td></tr></tbody>
+      </table>
+        </div>
+
+        <h3>Alertas Resolvidos por Pessoa (Período)</h3>
+        <div class="table-scroll" style="margin-bottom: 20px;">
+            <table>
+        <thead>
+          <tr><th>Responsável</th><th class="num">Total</th><th class="num">Peso %</th><th class="bar-cell"></th></tr>
+        </thead>
+        <tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">238</td><td class="num">29.17</td><td><div class="bar-track"><div class="bar-fill" style="width:29.17%"></div></div></td></tr><tr><td>Daniel Cruz</td><td class="num">77</td><td class="num">9.44</td><td><div class="bar-track"><div class="bar-fill" style="width:9.44%"></div></div></td></tr><tr><td>Pedro Bittencourt</td><td class="num">75</td><td class="num">9.19</td><td><div class="bar-track"><div class="bar-fill" style="width:9.19%"></div></div></td></tr><tr><td>Wellington Casas</td><td class="num">426</td><td class="num">52.21</td><td><div class="bar-track"><div class="bar-fill" style="width:52.21%"></div></div></td></tr><tr><td>Total</td><td class="num">816</td><td class="num">—</td><td></td></tr></tbody>
+      </table>
+        </div>
+        <h3>Alertas Criados por Prioridade (Período)</h3>
+        <div class="table-scroll" style="margin-bottom: 20px;">
+            <table>
+        <thead>
+          <tr><th>Prioridade</th><th class="num">Total</th><th class="num">Peso %</th><th class="bar-cell"></th></tr>
+        </thead>
+        <tbody>
+<tr><td>Urgentes</td><td class="num">38</td><td class="num">8.26</td><td><div class="bar-track"><div class="bar-fill" style="width:8.26%"></div></div></td></tr>
+<tr><td>Altas</td><td class="num">204</td><td class="num">44.35</td><td><div class="bar-track"><div class="bar-fill" style="width:44.35%"></div></div></td></tr>
+<tr><td>Media API</td><td class="num">168</td><td class="num">36.52</td><td><div class="bar-track"><div class="bar-fill" style="width:36.52%"></div></div></td></tr>
+<tr><td>Baixa</td><td class="num">50</td><td class="num">10.87</td><td><div class="bar-track"><div class="bar-fill" style="width:10.87%"></div></div></td></tr>
+<tr><td>Outros</td><td class="num">0</td><td class="num">0.00</td><td><div class="bar-track"><div class="bar-fill" style="width:0.00%"></div></div></td></tr>
+<tr><td>Total</td><td class="num">460</td><td class="num">—</td><td></td></tr>
+        </tbody>
+      </table>
+        </div></details></section>
+
+    <!-- VISÃO HISTÓRICA -->
+    <section class="report-section"><details open="" class="report-collapsible"><summary class="report-collapsible-summary"><h2>📈 3. Visão Histórica (Pivot Mensal)</h2></summary>
+        
+        <div id="sec-historico">
+        <p style="color: var(--text-muted); margin-bottom: 12px;">Acompanhamento da evolução de produtividade e qualidade. <strong>No máximo 7 colunas de mês</strong> por tabela; use o filtro para escolher a janela (até 7 meses contíguos).</p>
+
+        <div class="pivot-period-filter" role="region" aria-label="Filtro de período dos pivots">
+            <div>
+                <label for="pivotMesInicio">Mês inicial</label>
+                <select id="pivotMesInicio" aria-describedby="pivotHint"></select>
+            </div>
+            <div>
+                <label for="pivotMesFim">Mês final</label>
+                <select id="pivotMesFim" aria-describedby="pivotHint"></select>
+            </div>
+            <p id="pivotHint" class="hint">A janela não pode ultrapassar 7 meses. As tabelas abaixo compartilham o mesmo filtro.</p>
+        </div>
+
+        <div class="historico-pivot">
+            <h3>Story Points por Atividades (mensal)</h3>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Responsável</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Total</th><th class="num pivot-summary">Peso %</th></tr></thead><tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">52</td><td class="num">43</td><td class="num">45</td><td class="num">38</td><td class="num">30</td><td class="num">35</td><td class="num">40</td><td class="num">283</td><td class="num">20.33</td></tr><tr><td>Antonio Balardino</td><td class="num">0</td><td class="num">7</td><td class="num">33</td><td class="num">43</td><td class="num">21</td><td class="num">22</td><td class="num">55</td><td class="num">181</td><td class="num">13.00</td></tr><tr><td>Bruna Elis Vogel</td><td class="num">43</td><td class="num">22</td><td class="num">40</td><td class="num">29</td><td class="num">27</td><td class="num">26</td><td class="num">51</td><td class="num">238</td><td class="num">17.10</td></tr><tr><td>Daniel Cruz</td><td class="num">0</td><td class="num">0</td><td class="num">9</td><td class="num">2</td><td class="num">17</td><td class="num">13</td><td class="num">24</td><td class="num">65</td><td class="num">4.67</td></tr><tr><td>Jonas Elan</td><td class="num">89</td><td class="num">43</td><td class="num">23</td><td class="num">31</td><td class="num">27</td><td class="num">10</td><td class="num">59</td><td class="num">282</td><td class="num">20.26</td></tr><tr><td>Maria Eduarda da Silva Joaquim</td><td class="num">55</td><td class="num">69</td><td class="num">63</td><td class="num">21</td><td class="num">35</td><td class="num">28</td><td class="num">72</td><td class="num">343</td><td class="num">24.64</td></tr><tr><td>Total</td><td class="num">239</td><td class="num">184</td><td class="num">213</td><td class="num">164</td><td class="num">157</td><td class="num">134</td><td class="num">301</td><td class="num">1392</td><td class="num">—</td></tr></tbody></table></div>
+        </div>
+
+        <div class="historico-pivot">
+            <h3>Contagem de Alertas resolvidos (mensal)</h3>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Responsável</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Total</th><th class="num pivot-summary">Peso %</th></tr></thead><tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">449</td><td class="num">1076</td><td class="num">215</td><td class="num">474</td><td class="num">263</td><td class="num">2256</td><td class="num">554</td><td class="num">5287</td><td class="num">56.42</td></tr><tr><td>Bruna Elis Vogel</td><td class="num">2381</td><td class="num">61</td><td class="num">109</td><td class="num">0</td><td class="num">5</td><td class="num">0</td><td class="num">0</td><td class="num">2556</td><td class="num">27.28</td></tr><tr><td>Daniel Cruz</td><td class="num">0</td><td class="num">2</td><td class="num">225</td><td class="num">11</td><td class="num">374</td><td class="num">173</td><td class="num">227</td><td class="num">1012</td><td class="num">10.80</td></tr><tr><td>Maria Eduarda da Silva Joaquim</td><td class="num">0</td><td class="num">14</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">14</td><td class="num">0.15</td></tr><tr><td>Pedro Bittencourt</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">75</td><td class="num">75</td><td class="num">0.80</td></tr><tr><td>Wellington Casas</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">426</td><td class="num">426</td><td class="num">4.55</td></tr><tr><td>Total</td><td class="num">2830</td><td class="num">1153</td><td class="num">549</td><td class="num">485</td><td class="num">642</td><td class="num">2429</td><td class="num">1282</td><td class="num">9370</td><td class="num">—</td></tr></tbody></table></div>
+        </div>
+
+        <div class="historico-pivot">
+            <h3>Tempo médio de resolução dos alertas por prioridade (dias)</h3>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Prioridade</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Média período</th></tr></thead><tbody><tr><td>Urgentes</td><td class="num">14.0 d</td><td class="num">0.5 d</td><td class="num">1.2 d</td><td class="num">0.8 d</td><td class="num">1.1 d</td><td class="num">0.8 d</td><td class="num">1.2 d</td><td class="num">3.8 d</td></tr><tr><td>Altas</td><td class="num">2.8 d</td><td class="num">7.2 d</td><td class="num">6.0 d</td><td class="num">1.7 d</td><td class="num">9.7 d</td><td class="num">3.8 d</td><td class="num">2.4 d</td><td class="num">4.2 d</td></tr><tr><td>Media API</td><td class="num">6.3 d</td><td class="num">5.6 d</td><td class="num">1.5 d</td><td class="num">1.6 d</td><td class="num">7.1 d</td><td class="num">70.7 d</td><td class="num">16.5 d</td><td class="num">43.7 d</td></tr><tr><td>Baixa</td><td class="num">0.9 d</td><td class="num">8.5 d</td><td class="num">26.4 d</td><td class="num">1.9 d</td><td class="num">24.4 d</td><td class="num">2.3 d</td><td class="num">27.4 d</td><td class="num">21.7 d</td></tr><tr><td>Outros</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td>Total</td><td class="num">4.6 d</td><td class="num">4.3 d</td><td class="num">12.8 d</td><td class="num">1.5 d</td><td class="num">9.0 d</td><td class="num">45.5 d</td><td class="num">10.7 d</td><td class="num">15.8 d</td></tr></tbody></table></div>
+        </div>
+
+        <div class="historico-pivot">
+            <h3>Tickets N3 (mensal)</h3>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Responsável</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Total</th><th class="num pivot-summary">Peso %</th></tr></thead><tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">0</td><td class="num">2</td><td class="num">5</td><td class="num">1</td><td class="num">0</td><td class="num">8</td><td class="num">3</td><td class="num">19</td><td class="num">19.19</td></tr><tr><td>Bruna Elis Vogel</td><td class="num">2</td><td class="num">4</td><td class="num">4</td><td class="num">4</td><td class="num">0</td><td class="num">0</td><td class="num">3</td><td class="num">17</td><td class="num">17.17</td></tr><tr><td>Daniel Cruz</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">4</td><td class="num">6</td><td class="num">12</td><td class="num">12.12</td></tr><tr><td>Maria Eduarda da Silva Joaquim</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1.01</td></tr><tr><td>Pedro Bittencourt</td><td class="num">0</td><td class="num">7</td><td class="num">0</td><td class="num">1</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td class="num">18</td><td class="num">18.18</td></tr><tr><td>Wellington Casas</td><td class="num">0</td><td class="num">11</td><td class="num">0</td><td class="num">2</td><td class="num">4</td><td class="num">11</td><td class="num">4</td><td class="num">32</td><td class="num">32.32</td></tr><tr><td>Total</td><td class="num">2</td><td class="num">25</td><td class="num">10</td><td class="num">9</td><td class="num">7</td><td class="num">27</td><td class="num">19</td><td class="num">99</td><td class="num">—</td></tr></tbody></table></div>
+        </div>
+        </div><!-- #sec-historico -->
+    </details></section>
+
+    <!-- VISÃO TIME -->
+    <section class="report-section"><details open="" class="report-collapsible"><summary class="report-collapsible-summary"><h2>🤝 4. Visão Time (Retrospectiva)</h2></summary>
+        
+        
+        <p>Fala time! Neste ciclo nós mandamos muito bem na qualidade: resolvemos 816 alertas (356 a mais do que os que entraram!) e baixamos drasticamente o tempo de resolução dos alertas de API.</p>
+
+        <ul>
+            <li><strong style="color: var(--success);">O que foi bem:</strong> Nosso saldo de alertas foi extremamente positivo (-356), tirando um peso enorme da nossa fila de incidentes. Também tivemos o maior pico de Story Points desde Agosto/25!</li>
+            <li><strong style="color: var(--danger);">Onde doeu:</strong> Nosso fluxo de novas entregas está engarrafado. Temos 80 pontos de esforço parados entre o Backlog da sprint e "Em andamento", esperando para serem concluídos.</li>
+        </ul>
+
+        <div class="highlight-box" style="border-color: var(--primary-color);">
+            <strong>Para a próxima sprint:</strong><br>
+            Que tal combinarmos de focar em "terminar de começar e começar a terminar"? Vamos limpar as colunas de Code Review e Tarefas Pendentes antes de puxar qualquer card novo para "In Progress". Topam?
+        </div>
+    </details></section>
+
+
+    <section class="report-section"><details open="" class="report-collapsible"><summary class="report-collapsible-summary"><h2>🏷️ 5. Visão por Tags (Melhoria, Suporte, Proativa)</h2></summary>
+        
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Acompanhamento das tarefas abertas nos boards (IOAM, INTS) contendo as tags específicas no título. Consolidado do time.</p>
+        
+        <h3>Visão Sprint Atual</h3>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Tag [MELHORIA] (Sprint Atual)</h4>
+            <div class="table-scroll" style="margin-bottom: 10px;">
+                <table>
+                    <thead><tr><th>Responsável</th><th class="num">Quantidade</th></tr></thead>
+                    <tbody><tr><td>Bruna Elis Vogel</td><td class="num">4</td></tr><tr><td>Daniel Cruz</td><td class="num">1</td></tr><tr><td><strong>Total</strong></td><td class="num"><strong>5</strong></td></tr></tbody>
+                </table>
+            </div>
+            <details class="report-collapsible">
+                <summary class="report-collapsible-summary" style="font-size: 0.9em; color: var(--primary-color);">Ver tarefas detalhadas</summary>
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>Chave</th><th>Resumo</th><th>Responsável</th></tr></thead>
+                        <tbody><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7165" target="_blank" rel="noopener noreferrer">IOAM-7165</a></td><td>[MELHORIA] Customizar campo "benRea" ficha Basica remover regra "when" do padronizado</td><td>Bruna Elis Vogel</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7164" target="_blank" rel="noopener noreferrer">IOAM-7164</a></td><td>[MELHORIA] Fluxo Standard Senior - Remover validação temporária campo 'benRea' ficha basica</td><td>Bruna Elis Vogel</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7160" target="_blank" rel="noopener noreferrer">IOAM-7160</a></td><td>[MELHORIA] Ajuste no campo 'benRea' da ficha Basica</td><td>Bruna Elis Vogel</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7159" target="_blank" rel="noopener noreferrer">IOAM-7159</a></td><td>[MELHORIA] Enviar campo 'codBai' na ficha Complementar</td><td>Bruna Elis Vogel</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7145" target="_blank" rel="noopener noreferrer">IOAM-7145</a></td><td>[MELHORIA] Consultar códigos de UF na Sankhya antes de enviar</td><td>Daniel Cruz</td></tr></tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+    
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Tag [SUPORTE] (Sprint Atual)</h4>
+            <div class="table-scroll" style="margin-bottom: 10px;">
+                <table>
+                    <thead><tr><th>Responsável</th><th class="num">Quantidade</th></tr></thead>
+                    <tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">2</td></tr><tr><td>Bruna Elis Vogel</td><td class="num">1</td></tr><tr><td><strong>Total</strong></td><td class="num"><strong>3</strong></td></tr></tbody>
+                </table>
+            </div>
+            <details class="report-collapsible">
+                <summary class="report-collapsible-summary" style="font-size: 0.9em; color: var(--primary-color);">Ver tarefas detalhadas</summary>
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>Chave</th><th>Resumo</th><th>Responsável</th></tr></thead>
+                        <tbody><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7175" target="_blank" rel="noopener noreferrer">IOAM-7175</a></td><td>[SUPORTE][PROATIVA] - Fluxo standard Senior</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7172" target="_blank" rel="noopener noreferrer">IOAM-7172</a></td><td>[SUPORTE][PROATIVA] - Fluxo standard RM TOTVS</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7135" target="_blank" rel="noopener noreferrer">IOAM-7135</a></td><td>[SUPORTE] - Hospital Care - Alterção de campo customizado de vaga</td><td>Bruna Elis Vogel</td></tr></tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+    
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Tag [PROATIVA] (Sprint Atual)</h4>
+            <div class="table-scroll" style="margin-bottom: 10px;">
+                <table>
+                    <thead><tr><th>Responsável</th><th class="num">Quantidade</th></tr></thead>
+                    <tbody><tr><td>Bruna Elis Vogel</td><td class="num">1</td></tr><tr><td>Adriel Henrique Borges Cochito</td><td class="num">6</td></tr><tr><td>Daniel Cruz</td><td class="num">2</td></tr><tr><td><strong>Total</strong></td><td class="num"><strong>9</strong></td></tr></tbody>
+                </table>
+            </div>
+            <details class="report-collapsible">
+                <summary class="report-collapsible-summary" style="font-size: 0.9em; color: var(--primary-color);">Ver tarefas detalhadas</summary>
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>Chave</th><th>Resumo</th><th>Responsável</th></tr></thead>
+                        <tbody><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7177" target="_blank" rel="noopener noreferrer">IOAM-7177</a></td><td>[PROATIVA] - Beep - Envio dos dependentes em looping</td><td>Bruna Elis Vogel</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7175" target="_blank" rel="noopener noreferrer">IOAM-7175</a></td><td>[SUPORTE][PROATIVA] - Fluxo standard Senior</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7172" target="_blank" rel="noopener noreferrer">IOAM-7172</a></td><td>[SUPORTE][PROATIVA] - Fluxo standard RM TOTVS</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7171" target="_blank" rel="noopener noreferrer">IOAM-7171</a></td><td>[SAUDE][PROATIVA] - Fluxo standard Metadados</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7170" target="_blank" rel="noopener noreferrer">IOAM-7170</a></td><td>[SAUDE][PROATIVA] - Fluxo Standard LG</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7169" target="_blank" rel="noopener noreferrer">IOAM-7169</a></td><td>[SAUDE][PROATIVA] - Fluxo Standard APData</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7168" target="_blank" rel="noopener noreferrer">IOAM-7168</a></td><td>[SAUDE][PROATIVA] - Fluxo Standard ADP</td><td>Adriel Henrique Borges Cochito</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7151" target="_blank" rel="noopener noreferrer">IOAM-7151</a></td><td>[PROATIVA] - Fortbras - Erro de Admissão mais claro</td><td>Daniel Cruz</td></tr><tr><td><a href="https://gupy-io.atlassian.net/browse/IOAM-7146" target="_blank" rel="noopener noreferrer">IOAM-7146</a></td><td>[PROATIVA] - Marilan -  Erro de Violação de Chave mais claro</td><td>Daniel Cruz</td></tr></tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+    
+        
+        <h3 style="margin-top: 30px;">Visão Histórica (Mês e Semestre)</h3>
+        <p class="meta" style="font-size: 0.85em; color: var(--warning);">Nota: O relatório fonte não contém a tabela pivot histórica para a tag [MELHORIA]. Abaixo estão os históricos disponíveis.</p>
+        
+        <div class="historico-pivot">
+            <h4>Histórico — Tarefas [SUPORTE]</h4>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Criador</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Total</th><th class="num pivot-summary">Peso %</th></tr></thead><tbody><tr><td>Adriel Henrique Borges Cochito</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">3.77</td></tr><tr><td>Bruna Elis Vogel</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">3</td><td class="num">5.66</td></tr><tr><td>Daniel Cruz</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1.89</td></tr><tr><td>Pedro Bittencourt</td><td class="num">3</td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">0</td><td class="num">4</td><td class="num">5</td><td class="num">18</td><td class="num">33.96</td></tr><tr><td>Wellington Casas</td><td class="num">5</td><td class="num">8</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">5</td><td class="num">2</td><td class="num">29</td><td class="num">54.72</td></tr><tr><td>Total</td><td class="num">9</td><td class="num">13</td><td class="num">3</td><td class="num">7</td><td class="num">5</td><td class="num">9</td><td class="num">7</td><td class="num">53</td><td class="num">—</td></tr></tbody></table></div>
+        </div>
+        
+        <div class="historico-pivot">
+            <h4>Histórico — Tarefas [PROATIVA]</h4>
+            <div class="table-scroll"><table class="table-pivot"><thead><tr><th>Criador</th><th class="num pivot-month" data-month-key="0">set/25</th><th class="num pivot-month" data-month-key="1">out/25</th><th class="num pivot-month" data-month-key="2">nov/25</th><th class="num pivot-month" data-month-key="3">dez/25</th><th class="num pivot-month" data-month-key="4">jan/26</th><th class="num pivot-month" data-month-key="5">fev/26</th><th class="num pivot-month" data-month-key="6">mar/26</th><th class="num pivot-summary">Total</th><th class="num pivot-summary">Peso %</th></tr></thead><tbody><tr><td>Bruna Elis Vogel</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">5.26</td></tr><tr><td>Pedro Bittencourt</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">2</td><td class="num">3</td><td class="num">6</td><td class="num">13</td><td class="num">68.42</td></tr><tr><td>Wellington Casas</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">3</td><td class="num">5</td><td class="num">26.32</td></tr><tr><td>Total</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">1</td><td class="num">2</td><td class="num">5</td><td class="num">9</td><td class="num">19</td><td class="num">—</td></tr></tbody></table></div>
+        </div>
+    </details></section>
+</div>
+
+<script>
+(function () {
+  var MAX_MESES = 7;
+  var META_SP = 30;
+
+  /* Substituir no run: nomes curtos + SP do período (ex.: concluídos na sprint) por pessoa */
+  var productivityLabels = ['Adriel', 'Antonio', 'Bruna', 'Daniel', 'Jonas', 'Maria'];
+  var productivitySp = [28, 34, 27, 10, 42, 36];
+
+  function initChartProdutividade() {
+    var el = document.getElementById('chartProdutividadeMeta30');
+    if (!el || typeof Chart === 'undefined') return;
+    var metaLine = productivityLabels.map(function () { return META_SP; });
+    new Chart(el, {
+      type: 'bar',
+      data: {
+        labels: productivityLabels,
+        datasets: [
+          {
+            label: 'Story Points (período)',
+            data: productivitySp,
+            backgroundColor: 'rgba(0, 82, 204, 0.55)',
+            borderColor: '#0052CC',
+            borderWidth: 1,
+            order: 2
+          },
+          {
+            type: 'line',
+            label: 'Meta (30 SP / pessoa)',
+            data: metaLine,
+            borderColor: '#FF5630',
+            borderDash: [6, 4],
+            pointRadius: 0,
+            fill: false,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'Story Points' } }
+        },
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: { mode: 'index', intersect: false }
+        }
+      }
+    });
+  }
+
+  function getPivotTables(root) {
+    return [].slice.call(root.querySelectorAll('table.table-pivot'));
+  }
+
+  function collectMonthMeta(firstTable) {
+    var tr = firstTable.querySelector('thead tr');
+    if (!tr) return [];
+    var cells = [].slice.call(tr.children);
+    var out = [];
+    cells.forEach(function (th, idx) {
+      if (th.classList.contains('pivot-month')) {
+        out.push({
+          index: idx,
+          ord: out.length,
+          key: th.getAttribute('data-month-key') || String(out.length),
+          label: th.textContent.trim()
+        });
+      }
+    });
+    return out;
+  }
+
+  function applyPivotMonthFilter(root, startOrd, endOrd) {
+    var tables = getPivotTables(root);
+    if (!tables.length) return;
+    var months = collectMonthMeta(tables[0]);
+    if (!months.length) return;
+    startOrd = Math.max(0, Math.min(startOrd, months.length - 1));
+    endOrd = Math.max(0, Math.min(endOrd, months.length - 1));
+    if (startOrd > endOrd) { var t = startOrd; startOrd = endOrd; endOrd = t; }
+    if (endOrd - startOrd + 1 > MAX_MESES) endOrd = startOrd + MAX_MESES - 1;
+
+    var byIndex = {};
+    months.forEach(function (m) {
+      byIndex[m.index] = m.ord;
+    });
+
+    tables.forEach(function (table) {
+      var headerRow = table.querySelector('thead tr');
+      if (!headerRow) return;
+      var ths = [].slice.call(headerRow.children);
+      ths.forEach(function (th, idx) {
+        if (!th.classList.contains('pivot-month')) return;
+        var ord = byIndex[idx];
+        if (ord === undefined) return;
+        var hide = ord < startOrd || ord > endOrd;
+        th.classList.toggle('pivot-col-hidden', hide);
+        [].slice.call(table.querySelectorAll('tbody tr')).forEach(function (tr) {
+          var cell = tr.children[idx];
+          if (cell) cell.classList.toggle('pivot-col-hidden', hide);
+        });
+      });
+    });
+  }
+
+  function initPivotFilter() {
+    var root = document.getElementById('sec-historico');
+    var selA = document.getElementById('pivotMesInicio');
+    var selB = document.getElementById('pivotMesFim');
+    if (!root || !selA || !selB) return;
+    var tables = getPivotTables(root);
+    if (!tables.length) return;
+    var months = collectMonthMeta(tables[0]);
+    if (!months.length) return;
+
+    function fillSelect(sel) {
+      sel.innerHTML = '';
+      months.forEach(function (m, ord) {
+        var o = document.createElement('option');
+        o.value = String(ord);
+        o.textContent = m.label;
+        sel.appendChild(o);
+      });
+    }
+    fillSelect(selA);
+    fillSelect(selB);
+    selA.value = '0';
+    selB.value = String(Math.min(months.length - 1, MAX_MESES - 1));
+
+    function onChange() {
+      var a = parseInt(selA.value, 10);
+      var b = parseInt(selB.value, 10);
+      if (a > b) { selB.value = selA.value; b = a; }
+      if (b - a + 1 > MAX_MESES) {
+        b = a + MAX_MESES - 1;
+        if (b > months.length - 1) {
+          b = months.length - 1;
+          a = Math.max(0, b - (MAX_MESES - 1));
+          selA.value = String(a);
+        }
+        selB.value = String(b);
+      }
+      applyPivotMonthFilter(root, a, b);
+    }
+
+    selA.addEventListener('change', onChange);
+    selB.addEventListener('change', onChange);
+    onChange();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initChartProdutividade();
+    initPivotFilter();
+  });
+})();
+</script>
+
+</body></html>

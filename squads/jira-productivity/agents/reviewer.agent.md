@@ -33,15 +33,16 @@ Estruturado, objetivo e avaliativo. Usa o formato padrão de review com notas, j
 
 ### Process
 1. Leia os 3 relatórios gerados pelo Tiago Texto.
-2. Avalie a **Visão Diretoria**: verifique o tamanho do resumo (max 5 linhas), ausência de jargões e clareza do impacto de negócio.
-3. Avalie a **Visão Gestão**: verifique se o gargalo está claro e se a ação recomendada faz sentido com os dados.
-4. Avalie a **Visão Time**: verifique o tom de voz (empático, focado no processo) e a utilidade do combinado sugerido.
-5. Verifique a ausência de anti-patterns (ex: culpar indivíduos, usar velocity como produtividade).
-6. Gere o veredito final (APPROVE ou REJECT) com a tabela de notas e feedback detalhado.
+2. Abra **`dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. **REJECT** se o arquivo não existir. Confira se a **estrutura** corresponde ao **`pipeline/data/dashboard-layout-reference.html` atual** (seções 1–5, gráfico, filtro histórico, cards da Diretoria) e se os principais números batem com o markdown e com `raw-metrics.md` (quando disponível).
+3. Avalie a **Visão Diretoria**: verifique o tamanho do resumo (max 5 linhas), ausência de jargões e clareza do impacto de negócio.
+4. Avalie a **Visão Gestão**: verifique se o gargalo está claro e se a ação recomendada faz sentido com os dados.
+5. Avalie a **Visão Time**: verifique o tom de voz (empático, focado no processo) e a utilidade do combinado sugerido.
+6. Verifique a ausência de anti-patterns (ex: culpar indivíduos, usar velocity como produtividade).
+7. Gere o veredito final (APPROVE ou REJECT) com a tabela de notas e feedback detalhado (inclua uma linha **Dashboard HTML** na tabela de scores).
 
 ### Decision Criteria
 - **APPROVE:** Todas as notas >= 7 e nenhum anti-pattern detectado.
-- **REJECT:** Qualquer nota < 7, presença de jargão na visão diretoria, tom acusatório na visão time, ou uso de anti-patterns ágeis.
+- **REJECT:** Qualquer nota < 7, presença de jargão na visão diretoria, tom acusatório na visão time, uso de anti-patterns ágeis, ou **ausência de `dashboard-final.html`** / dashboard claramente inconsistente com os dados.
 
 ## Voice Guidance
 
@@ -105,7 +106,7 @@ PATH TO APPROVAL:
 
 ## Integration
 
-- **Reads from:** `squads/jira-productivity/output/final-reports.md` e `quality-criteria.md`
+- **Reads from:** `squads/jira-productivity/output/final-reports.md`, `squads/jira-productivity/output/dashboard-final.html` (mesmo diretório versionado), `quality-criteria.md`
 - **Writes to:** `squads/jira-productivity/output/review-verdict.md`
 - **Triggers:** Step 04 do pipeline.
 - **Depends on:** Step 03 (escrita dos relatórios).

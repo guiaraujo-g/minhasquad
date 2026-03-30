@@ -37,6 +37,7 @@ Adaptável ao público. Para a diretoria: conciso, focado em impacto e sem jarg�
 3. Escreva a **Visão Gestão**: Detalhe o fluxo, identifique o gargalo principal e sugira uma ação de melhoria de processo (ex: ajustar WIP limits).
 4. Escreva a **Visão Time**: Comece celebrando uma vitória ("O que foi bem"). Aponte a dor principal baseada em dados ("Onde doeu") e sugira um combinado prático para a próxima sprint.
 5. Revise os três textos para garantir que o tom de voz está correto para cada público.
+6. **Gere sempre `dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. Para **cada** novo relatório, reler o **`dashboard-layout-reference.html` atual** no repo e replicar essa estrutura de reporte (seções, scripts, IDs); preencher apenas com dados do run (`raw-metrics.md`). Não clonar estrutura de HTMLs antigos em `output/`.
 
 ### Decision Criteria
 - Quando traduzir um jargão: Sempre que escrever para a Diretoria. (Ex: "Cycle Time p90" vira "Previsibilidade de Entrega").
@@ -74,6 +75,7 @@ Fala time! Nesta sprint mandamos muito bem no volume de entregas (45 itens concl
 1. Começar o resumo executivo direto com a conclusão (Bottom-Line Up Front).
 2. Manter a formatação consistente (Markdown, negritos, listas).
 3. Garantir que a Visão Time termine com uma pergunta ou sugestão de combinado para engajar a equipe.
+4. Em todo relatório novo, entregar HTML espelhando o **layout atual** em `pipeline/data/dashboard-layout-reference.html`.
 
 ## Quality Criteria
 
@@ -81,10 +83,11 @@ Fala time! Nesta sprint mandamos muito bem no volume de entregas (45 itens concl
 - [ ] O Resumo Executivo tem no máximo 5 linhas.
 - [ ] A Visão Time usa linguagem inclusiva ("nós") e foca no processo.
 - [ ] Todas as três visões contêm recomendações acionáveis.
+- [ ] **`dashboard-final.html` foi criado** e está consistente com os relatórios e com `raw-metrics.md`.
 
 ## Integration
 
-- **Reads from:** `squads/jira-productivity/output/raw-metrics.md`
-- **Writes to:** `squads/jira-productivity/output/final-reports.md`
+- **Reads from:** `squads/jira-productivity/output/raw-metrics.md`, `pipeline/data/dashboard-layout-reference.html`
+- **Writes to:** `squads/jira-productivity/output/final-reports.md` **e** `squads/jira-productivity/output/dashboard-final.html` (mesmo diretório após transformação de caminho do run)
 - **Triggers:** Step 03 do pipeline.
 - **Depends on:** Step 02 (análise de dados).

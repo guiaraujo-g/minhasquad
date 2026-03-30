@@ -13,14 +13,27 @@ Load these files before executing:
 - `squads/jira-productivity/output/raw-metrics.md` — Dados brutos e insights gerados pelo analista
 - `squads/jira-productivity/pipeline/data/output-examples.md` — Exemplos de como estruturar os relatórios
 - `squads/jira-productivity/pipeline/data/anti-patterns.md` — Erros a evitar na escrita
+- `squads/jira-productivity/pipeline/data/dashboard-layout-reference.html` — Estrutura, CSS e seções obrigatórias do dashboard HTML
 
 ## Instructions
+
+**Regra global:** Em **toda** solicitação de novo relatório de produtividade, a saída obrigatória inclui `dashboard-final.html` com a **mesma estrutura de reporte** que o arquivo **`pipeline/data/dashboard-layout-reference.html`** naquele momento (fonte única de verdade do layout). Não reaproveitar estrutura de `dashboard-final.html` de runs antigos em `output/`.
 
 ### Process
 1. Leia os dados brutos e insights gerados pelo Daniel Dados.
 2. Escreva a **Visão Diretoria (Executiva)**: foque em impacto de negócio, riscos, SLAs e previsibilidade. Evite jargões técnicos. Máximo de 5 linhas para o resumo.
 3. Escreva a **Visão Gestão**: foque em eficiência do fluxo, gargalos, WIP e qualidade. Inclua recomendações de ajuste de processo.
 4. Escreva a **Visão Time (Retrospectiva)**: foque em empatia, celebração de vitórias, identificação de dores (outliers) e combinados práticos para a próxima sprint.
+
+### Dashboard HTML (obrigatório — sempre)
+
+5. **Sempre** gere o arquivo **`dashboard-final.html`** no **mesmo diretório versionado** que `final-reports.md` (aplique a mesma transformação de caminho do Pipeline Runner: `squads/jira-productivity/output/{run_id}/vN/`).
+   - **Base obrigatória:** leia o **`dashboard-layout-reference.html` atual** no repositório e reproduza sua estrutura (não confiar em memória nem em HTML exportado de execuções anteriores). Preserve o `<style>`, **Chart.js** (CDN), scripts de filtro de período, as cinco seções colapsáveis (Diretoria, Gestão, Histórica com pivots, Time, Tags) e os padrões de tabelas/cards.
+   - **Seção 1 — Visão Diretoria:** os quatro cards de métrica devem ser, nesta ordem: (1) **Story Points alocados na sprint** (soma INTS + IOAM); (2) **Tickets N3 resolvidos pelo time** (somente integrações / escopo squad, não o total global N3); (3) **Total de alertas criados** (AL); (4) **Total de alertas resolvidos** (AL). Ajuste o texto do resumo executivo para refletir esses indicadores.
+   - **Seção 2 — Visão Gestão:** manter o bloco **“Produtividade vs meta (30 SP por pessoa)”** com `<canvas id="chartProdutividadeMeta30">` e o script que preenche `productivityLabels` e `productivitySp` com os **mesmos nomes e valores de SP do período** usados na análise (ex.: SP concluídos na sprint ou na janela do relatório, por pessoa do squad). A linha vermelha tracejada representa a **meta de 30 SP/pessoa**.
+   - **Seção 3 — Visão Histórica:** manter `#sec-historico`, o filtro (mês inicial / mês final) e **no máximo 7 colunas de mês** em cada `table.table-pivot` desta seção; cabeçalhos de mês com `class="pivot-month"` e `data-month-key="0"` … `"6"` na mesma ordem em **todas** as tabelas da seção. O JavaScript limita a janela visível a **no máximo 7 meses** contíguos.
+   - Preencha **todos** os números, textos e tabelas com os dados do run atual (`raw-metrics.md` e fontes citadas pelo analista). Seções 1–2 e 4 alinhadas ao markdown; seções 3 e 5 com pivots/tags conforme extração (≤7 meses na seção 3).
+   - Dependência externa permitida: **Chart.js** via CDN (já referenciado no layout).
 
 ## Output Format
 
@@ -71,9 +84,11 @@ Fala time! [Abertura empática]
 Reject and redo if ANY of these are true:
 1. A Visão Diretoria contém jargões não traduzidos (ex: "WIP Limit", "JQL").
 2. A Visão Time foca em culpar indivíduos em vez de focar no processo.
+3. **`dashboard-final.html` não foi criado** no mesmo diretório versionado que `final-reports.md`, ou está incompleto (falta seção, CSS, **gráfico de produtividade**, **filtro de período** na seção 3, ou cards da Diretoria fora do padrão acordado).
 
 ## Quality Criteria
 
 - [ ] O Resumo Executivo tem no máximo 5 linhas.
 - [ ] Cada visão tem um tom de voz adequado ao seu público.
 - [ ] Todas as 3 visões apresentam ações/recomendações claras.
+- [ ] **`dashboard-final.html` existe** ao lado de `final-reports.md`, com layout alinhado ao reference e dados do run.

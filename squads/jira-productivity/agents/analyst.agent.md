@@ -93,6 +93,6 @@ Direto e estruturado. Usa tabelas e bullet points. Sempre contextualiza os núme
 ## Integration
 
 - **Reads from:** Parâmetros do usuário e dados brutos via Jira MCP.
-- **Writes to:** `squads/jira-productivity/output/raw-metrics.md`
+- **Writes to:** `squads/jira-productivity/output/raw-metrics.md` — incluir campos explícitos para o Writer preencher o **`dashboard-final.html`** (estrutura atual em `pipeline/data/dashboard-layout-reference.html`): cards da Diretoria, SP por pessoa para o gráfico meta 30, pivots ≤7 meses, etc.
 - **Triggers:** Step 02 do pipeline.
 - **Depends on:** Step 01 (definição de parâmetros).

@@ -1,7 +1,7 @@
 {
   "squad": "goals-tracker",
   "status": "running",
-  "step": { "current": 6, "total": 6, "label": "step-06-final-approval" },
+  "step": { "current": 4, "total": 6, "label": "step-04-approve-content" },
   "agents": [
     {
       "id": "researcher",
@@ -31,17 +31,17 @@
       "id": "reviewer",
       "name": "Renata Revisão",
       "icon": "✅",
-      "status": "done",
+      "status": "idle",
       "deliverTo": null,
       "desk": { "col": 1, "row": 2 }
     }
   ],
   "handoff": {
-    "from": "reviewer",
+    "from": "writer",
     "to": "user",
-    "message": "Revisão final concluída. Relatórios aprovados com nota 9.3/10.",
-    "completedAt": "2026-03-26T11:27:50Z"
+    "message": "Relatórios de liderança e de time gravados em v1/; aguardando aprovação de conteúdo antes da revisão.",
+    "completedAt": "2026-03-30T13:26:00Z"
   },
-  "startedAt": "2026-03-26T11:27:00Z",
-  "updatedAt": "2026-03-26T11:27:50Z"
+  "startedAt": "2026-03-30T13:18:30Z",
+  "updatedAt": "2026-03-30T13:26:05Z"
 }

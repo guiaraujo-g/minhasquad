@@ -18,6 +18,8 @@ Load these files before executing:
 
 ## Instructions
 
+O relatório final **sempre** inclui `dashboard-final.html` com a estrutura atual em `pipeline/data/dashboard-layout-reference.html`. O `raw-metrics.md` deve trazer explicitamente os valores necessários para preencher esses blocos (cards da Diretoria, tabelas da Gestão, séries para o gráfico de 30 SP/pessoa, pivots ≤7 meses).
+
 ### Process
 1. Leia os parâmetros do usuário em `research-focus.md`.
 2. **MUITO IMPORTANTE:** Leia o arquivo `relatorio_consolidado_2026-03-12_2026-03-25.html`. Ele contém a base histórica completa e os dados reais do período. Use EXCLUSIVAMENTE os dados deste arquivo para preencher as métricas (ex: 177 Story Points, 816 Alertas resolvidos, 460 criados, etc).
@@ -42,6 +44,7 @@ The output MUST follow this exact structure:
 - Cycle Time p90: [Número] dias
 - WIP Médio Estimado: [Número] itens
 - Story Points Total: [Número]
+- **Story Points alocados na sprint (INTS + IOAM):** [Número] — soma de pontos no board da sprint atual nos dois projetos
 - Story Points por Pessoa: [Lista]
 - Tarefas [MELHORIA]: [Número]
 - Tarefas [PROATIVA]: [Número]
@@ -55,11 +58,13 @@ The output MUST follow this exact structure:
 - Tempo Médio de Resolução por Prioridade: [Lista]
 
 ## Métricas de Suporte (N3)
-- Tickets N3 Resolvidos: [Número]
-- Tickets N3 por Pessoa: [Lista]
+- Tickets N3 Resolvidos (empresa): [Número] — opcional, para contexto
+- **Tickets N3 resolvidos pelo time de integrações:** [Número] — somente assignees do escopo do squad (`_memory/memories.md`); este é o número que vai para a Visão Diretoria
+- Tickets N3 por Pessoa (time): [Lista]
 
-## Histórico e Tendências (Agosto/25 a Março/26)
-- [Resumo da evolução histórica baseada nas tabelas pivot do HTML]
+## Histórico e Tendências (pivot mensal)
+- [Resumo da evolução histórica]
+- **Regra para HTML:** nas tabelas pivot mensais, incluir **no máximo 7 colunas de mês** (nunca mais que 7); mesmos rótulos de mês e `data-month-key` sequencial (0…6) em todas as tabelas da seção 3 para o filtro funcionar
 
 ## Identificação de Padrões
 - Gargalo Principal: [Status com maior gargalo]

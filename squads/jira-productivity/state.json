@@ -1,0 +1,43 @@
+{
+  "squad": "jira-productivity",
+  "status": "running",
+  "step": {
+    "current": 5,
+    "total": 5,
+    "label": "step-05-checkpoint-approval"
+  },
+  "agents": [
+    {
+      "id": "analyst",
+      "name": "Daniel Dados",
+      "icon": "📊",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 1, "row": 1 }
+    },
+    {
+      "id": "writer",
+      "name": "Tiago Texto",
+      "icon": "📝",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 2, "row": 1 }
+    },
+    {
+      "id": "reviewer",
+      "name": "Rafael Revisão",
+      "icon": "🧐",
+      "status": "done",
+      "deliverTo": null,
+      "desk": { "col": 3, "row": 1 }
+    }
+  ],
+  "handoff": {
+    "from": "reviewer",
+    "to": "user",
+    "message": "Relatórios gerados e revisados (APPROVE 8,8/10). Aguardando sua aprovação final.",
+    "completedAt": "2026-03-30T12:45:00.000Z"
+  },
+  "startedAt": "2026-03-30T12:16:18.000Z",
+  "updatedAt": "2026-03-30T12:45:00.000Z"
+}
