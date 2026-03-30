@@ -1,3 +1,4 @@
+import { teamAssigneeInJql } from "@/lib/config";
 import { productivitySeriesForTeam } from "@/lib/chartSeries";
 import type { CountRow, GestaoSectionData, SpRow } from "@/lib/report/types";
 import { ProductivityChart } from "../ProductivityChart";
@@ -97,6 +98,7 @@ function SpDistributionTable({ rows }: { rows: SpRow[] }) {
 
 export function GestaoSection({ data }: Props) {
   const { labels, values } = productivitySeriesForTeam(data.intIoamSpCompletedByAssignee);
+  const alScope = teamAssigneeInJql() ? " · do time" : "";
 
   return (
     <section className="report-section">
@@ -128,10 +130,10 @@ export function GestaoSection({ data }: Props) {
           <CountDistributionTable rows={data.n3ResolvedByAssignee} />
         )}
 
-        <h3 className="section-h3">Alertas resolvidos por pessoa (período)</h3>
+        <h3 className="section-h3">Alertas resolvidos por pessoa (período){alScope}</h3>
         <CountDistributionTable rows={data.alResolvedByAssignee} />
 
-        <h3 className="section-h3">Alertas criados por prioridade (período)</h3>
+        <h3 className="section-h3">Alertas criados por prioridade (período){alScope}</h3>
         <div className="table-scroll">
           <table className="data-table">
             <thead>

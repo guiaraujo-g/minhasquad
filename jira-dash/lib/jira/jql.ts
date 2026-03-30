@@ -4,6 +4,13 @@ function quoteJqlDate(iso: string): string {
   return `"${iso}"`;
 }
 
+/** Anexa `assignee in (...)` quando o time está configurado (displayName ou accountId com IDs). */
+function withTeamAssignee(jql: string): string {
+  const assignee = teamAssigneeInJql();
+  if (!assignee) return jql;
+  return `${jql} AND ${assignee}`;
+}
+
 function resolvedInRange(from: string, to: string): string {
   const f = jqlResolvedFieldName();
   return `${f} >= ${quoteJqlDate(from)} AND ${f} <= ${quoteJqlDate(to)}`;
@@ -11,12 +18,14 @@ function resolvedInRange(from: string, to: string): string {
 
 export function jqlAlCreatedInRange(from: string, to: string): string {
   const p = PROJECT_KEYS.al;
-  return `project = ${p} AND created >= ${quoteJqlDate(from)} AND created <= ${quoteJqlDate(to)}`;
+  const base = `project = ${p} AND created >= ${quoteJqlDate(from)} AND created <= ${quoteJqlDate(to)}`;
+  return withTeamAssignee(base);
 }
 
 export function jqlAlResolvedInRange(from: string, to: string): string {
   const p = PROJECT_KEYS.al;
-  return `project = ${p} AND ${resolvedInRange(from, to)}`;
+  const base = `project = ${p} AND ${resolvedInRange(from, to)}`;
+  return withTeamAssignee(base);
 }
 
 export function jqlNeResolvedInRange(from: string, to: string): string {
@@ -29,11 +38,13 @@ export function jqlNeResolvedInRange(from: string, to: string): string {
 
 export function jqlIntsIoamResolvedInRange(from: string, to: string): string {
   const { ints, ioam } = PROJECT_KEYS;
-  return `project in (${ints}, ${ioam}) AND ${resolvedInRange(from, to)}`;
+  const base = `project in (${ints}, ${ioam}) AND ${resolvedInRange(from, to)}`;
+  return withTeamAssignee(base);
 }
 
 /** SP alocados em sprint aberta (INTS + IOAM). */
 export function jqlIntsIoamOpenSprint(): string {
   const { ints, ioam } = PROJECT_KEYS;
-  return `project in (${ints}, ${ioam}) AND sprint in openSprints()`;
+  const base = `project in (${ints}, ${ioam}) AND sprint in openSprints()`;
+  return withTeamAssignee(base);
 }

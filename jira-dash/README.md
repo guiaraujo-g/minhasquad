@@ -33,6 +33,12 @@ Preencha:
 | `JIRA_EXACT_ISSUE_COUNTS` | `true` para totais exatos (paginação; mais lento); padrão usa approximate-count |
 | `JIRA_PROJECT_NE` | Chave do projeto N3; padrão `NE`. Se na sua instância for `N3`, defina `JIRA_PROJECT_NE=N3` |
 
+### Escopo de assignees (time de 8 pessoas)
+
+AL (criados/resolvidos), INTS+IOAM (resolvidos no período e sprint aberta) e a soma de SP na sprint atual usam o **mesmo** fragmento `assignee in (...)` que vem de `TEAM_DISPLAY_NAMES` quando `JIRA_TEAM_FILTER_MODE=displayName` (padrão), ou de `JIRA_TEAM_ACCOUNT_IDS` em modo `accountId`. O projeto N3 (`JIRA_PROJECT_NE`) já vinha filtrado assim quando o escopo N3 está ativo. Se estiver em `accountId` e `JIRA_TEAM_ACCOUNT_IDS` estiver vazio, não há filtro de assignee nessas JQLs (comportamento antigo para AL/INTS+IOAM).
+
+Na **Visão Diretoria**, o card **Story Points concluídos no período · INTS+IOAM** é a soma de SP das issues resolvidas entre `from` e `to` com essa JQL — deve bater com a linha **Total** da tabela de distribuição de SP na Gestão.
+
 ### `resolved` vs `resolutiondate`
 
 Nos exemplos do Goals Tracker (`squads/goals-tracker/pipeline/data/jira-queries.md`) o filtro de “resolvido no período” usa o campo **`resolved`**. Este app usa o mesmo por padrão (`JIRA_JQL_RESOLVED_FIELD` não definido). Se o Jira da empresa só interpretar **`resolutiondate`** na JQL, defina `JIRA_JQL_RESOLVED_FIELD=resolutiondate` e documente isso no time.
@@ -62,7 +68,7 @@ No rodapé, **“JQL usada neste relatório”** lista as consultas do run e os 
 
 ### Carregamento progressivo
 
-Diretoria, Gestão e Histórico são buscadas em **blocos independentes** com `Suspense`: a página envia o shell (cabeçalho, datas, links) e cada seção aparece quando o respectivo conjunto de chamadas ao Jira termina. O número total de requests pode ser similar ao modo monolítico; o ganho é principalmente **tempo até ver o primeiro bloco** e percepção de progresso (skeletons). Issues N3 do período são compartilhadas entre Diretoria e Gestão via `React.cache` no mesmo request.
+Diretoria, Gestão e Histórico são buscadas em **blocos independentes** com `Suspense`: a página envia o shell (cabeçalho, datas, links) e cada seção aparece quando o respectivo conjunto de chamadas ao Jira termina. O número total de requests pode ser similar ao modo monolítico; o ganho é principalmente **tempo até ver o primeiro bloco** e percepção de progresso (skeletons). No mesmo request, `React.cache` deduplica **issues N3** e **issues INTS+IOAM resolvidas no período** entre Diretoria e Gestão.
 
 ## Build
 
@@ -91,6 +97,6 @@ npm start
 
 - `app/page.tsx` — valida período e credenciais; `Suspense` + blocos async (Diretoria / Gestão / Histórico)
 - `lib/jira/*` — cliente HTTP, busca paginada, JQL, `storyPoints.ts` (coerção de SP)
-- `lib/report/sectionLoaders.ts` — fetch por seção; `cachedFetchers.ts` + `React.cache` para N3
+- `lib/report/sectionLoaders.ts` — fetch por seção; `cachedFetchers.ts` + `React.cache` para N3 e INTS+IOAM no período
 - `lib/report/buildReport.ts` — agrega `loadFullReportData` (uso programático / testes)
 - `components/ProductivityChart.tsx` — Chart.js (cliente)

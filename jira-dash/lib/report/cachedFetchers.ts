@@ -1,7 +1,7 @@
 import { cache } from "react";
-import { n3TeamScopeActive } from "../config";
+import { intIoamIssueSearchFields, n3TeamScopeActive } from "../config";
 import { getJiraClientConfig } from "../jira/client";
-import { jqlNeResolvedInRange } from "../jira/jql";
+import { jqlIntsIoamResolvedInRange, jqlNeResolvedInRange } from "../jira/jql";
 import { searchAllIssues } from "../jira/search";
 import type { JiraIssue } from "../jira/search";
 
@@ -15,5 +15,14 @@ export const getCachedN3IssuesInPeriod = cache(
       "resolutiondate",
       "created",
     ]);
+  },
+);
+
+/** INTS+IOAM resolvidas no intervalo (Diretoria SP total + Gestão distribuição) — React.cache por request. */
+export const getCachedIntIoamResolvedIssuesInPeriod = cache(
+  async (from: string, to: string): Promise<JiraIssue[]> => {
+    const cfg = getJiraClientConfig();
+    if (!cfg) return [];
+    return searchAllIssues(cfg, jqlIntsIoamResolvedInRange(from, to), intIoamIssueSearchFields());
   },
 );

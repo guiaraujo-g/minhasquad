@@ -1,8 +1,13 @@
+import { teamAssigneeInJql } from "@/lib/config";
 import type { DiretoriaSectionData } from "@/lib/report/types";
 
 type Props = { data: DiretoriaSectionData };
 
 export function DiretoriaSection({ data }: Props) {
+  const teamScope = teamAssigneeInJql() !== null;
+  const alPeriodHint = teamScope
+    ? "Projeto AL · total no período · do time"
+    : "Projeto AL · total no período (sem filtro assignee)";
   const sprintVal =
     data.sprintSpTotal === null ? "—" : String(data.sprintSpTotal);
   const n3Val =
@@ -17,12 +22,21 @@ export function DiretoriaSection({ data }: Props) {
 
         <div className="highlight-box">
           <strong>Resumo:</strong> Indicadores consolidados do período{" "}
-          <strong>{data.periodLabelBr}</strong> — AL (alertas), N3 (projeto configurável, ex. NE/N3)
-          com o mesmo filtro de time que o squad (displayName por padrão), e SP em sprint aberta
-          INTS+IOAM quando a API responder.
+          <strong>{data.periodLabelBr}</strong> — AL, INTS+IOAM (incl. SP concluídos no período) e sprint
+          aberta usam o mesmo escopo de assignees que{" "}
+          <code>TEAM_DISPLAY_NAMES</code> / <code>JIRA_TEAM_FILTER_MODE</code> (quando configurado); N3
+          (projeto configurável, ex. NE) segue a mesma regra quando o filtro de time está ativo.
         </div>
 
         <div className="metric-grid">
+          <div className="metric-card">
+            <div className="metric-label">Story Points concluídos no período · INTS+IOAM</div>
+            <div className="metric-value">{data.intIoamSpPeriodTotal}</div>
+            <div className="metric-label">
+              {data.intIoamSpPeriodNote ??
+                "Soma de SP de issues resolvidas entre as datas do relatório (par com a Gestão)."}
+            </div>
+          </div>
           <div className="metric-card">
             <div className="metric-label">Story Points alocados (sprint)</div>
             <div className="metric-value">{sprintVal}</div>
@@ -57,12 +71,12 @@ export function DiretoriaSection({ data }: Props) {
           <div className="metric-card">
             <div className="metric-label">Alertas criados</div>
             <div className="metric-value">{data.alCreatedTotal}</div>
-            <div className="metric-label">Projeto AL · total no período</div>
+            <div className="metric-label">{alPeriodHint}</div>
           </div>
           <div className="metric-card">
             <div className="metric-label">Alertas resolvidos</div>
             <div className="metric-value">{data.alResolvedTotal}</div>
-            <div className="metric-label">Projeto AL · total no período</div>
+            <div className="metric-label">{alPeriodHint}</div>
           </div>
         </div>
       </details>

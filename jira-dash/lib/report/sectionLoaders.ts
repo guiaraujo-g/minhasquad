@@ -33,7 +33,7 @@ import {
   sortCountRowsTeamFirst,
   sumSpByAssignee,
 } from "./aggregations";
-import { getCachedN3IssuesInPeriod } from "./cachedFetchers";
+import { getCachedIntIoamResolvedIssuesInPeriod, getCachedN3IssuesInPeriod } from "./cachedFetchers";
 import { buildJqlSnapshot } from "./jqlSnapshot";
 import type {
   DiretoriaSectionData,
@@ -67,15 +67,27 @@ export async function loadDiretoriaSection(
 
   try {
     const n3IssuesP = n3Active ? getCachedN3IssuesInPeriod(from, to) : Promise.resolve([]);
-    const [alCreatedTotal, alResolvedTotal, n3Total, n3Issues, sprint] = await Promise.all([
-      issueCount(cfg, jqlAlCreatedInRange(from, to)),
-      issueCount(cfg, jqlAlResolvedInRange(from, to)),
-      n3Active ? issueCount(cfg, jqlNeResolvedInRange(from, to)) : Promise.resolve(0),
-      n3IssuesP,
-      safeSprintSpTotal(cfg, spFieldIds),
-    ]);
+    const intIoamIssuesP = getCachedIntIoamResolvedIssuesInPeriod(from, to);
+    const [alCreatedTotal, alResolvedTotal, n3Total, n3Issues, sprint, intIoamIssues] =
+      await Promise.all([
+        issueCount(cfg, jqlAlCreatedInRange(from, to)),
+        issueCount(cfg, jqlAlResolvedInRange(from, to)),
+        n3Active ? issueCount(cfg, jqlNeResolvedInRange(from, to)) : Promise.resolve(0),
+        n3IssuesP,
+        safeSprintSpTotal(cfg, spFieldIds),
+        intIoamIssuesP,
+      ]);
 
     const n3Sla = n3Active ? computeN3Sla(n3Issues) : null;
+
+    const intIoamSpRows = sumSpByAssignee(intIoamIssues, spFieldIds);
+    const intIoamSpPeriodTotal = intIoamSpRows.reduce((s, r) => s + r.sp, 0);
+    const intIoamSpPeriodNote =
+      intIoamIssues.length === 0
+        ? "Nenhuma issue INTS+IOAM resolvida no período com a JQL atual."
+        : intIoamSpPeriodTotal === 0
+          ? "Issues retornadas, mas nenhum Story Point reconhecido. Confira JIRA_STORY_POINTS_FIELD no export JSON da issue ou defina JIRA_INTIOAM_SP_FIELDS=navigable."
+          : null;
 
     return {
       ok: true,
@@ -84,6 +96,8 @@ export async function loadDiretoriaSection(
         periodLabelBr,
         alCreatedTotal,
         alResolvedTotal,
+        intIoamSpPeriodTotal,
+        intIoamSpPeriodNote,
         sprintSpTotal: sprint.total,
         sprintSpNote: sprint.note,
         n3ResolvedTeamTotal: n3Active ? n3Total : null,
@@ -105,13 +119,11 @@ export async function loadGestaoSection(
 ): Promise<SectionResult<GestaoSectionData>> {
   const n3Active = n3TeamScopeActive();
   const spFieldIds = getStoryPointsFieldIds();
-  const fieldsIntIoam = intIoamIssueSearchFields();
-
   try {
     const [alResolvedIssues, alCreatedIssues, intIoamIssues, n3Issues] = await Promise.all([
       searchAllIssues(cfg, jqlAlResolvedInRange(from, to), ["assignee", "priority"]),
       searchAllIssues(cfg, jqlAlCreatedInRange(from, to), ["priority"]),
-      searchAllIssues(cfg, jqlIntsIoamResolvedInRange(from, to), fieldsIntIoam),
+      getCachedIntIoamResolvedIssuesInPeriod(from, to),
       n3Active ? getCachedN3IssuesInPeriod(from, to) : Promise.resolve([]),
     ]);
 

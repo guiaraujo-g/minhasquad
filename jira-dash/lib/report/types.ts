@@ -38,6 +38,9 @@ export type DiretoriaSectionData = {
   periodLabelBr: string;
   alCreatedTotal: number;
   alResolvedTotal: number;
+  /** Soma de SP INTS+IOAM resolvidas no período (mesma base da Gestão). */
+  intIoamSpPeriodTotal: number;
+  intIoamSpPeriodNote: string | null;
   sprintSpTotal: number | null;
   sprintSpNote: string | null;
   n3ResolvedTeamTotal: number | null;
