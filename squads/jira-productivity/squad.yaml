@@ -1,5 +1,5 @@
 name: "Jira Productivity Squad"
-description: "Analisa dados do Jira e gera relatórios de produtividade em 3 visões: Diretoria, Gestão e Time."
+description: "Analisa dados do Jira e gera relatórios de produtividade (Diretoria, Gestão, Time) + dashboard HTML obrigatório (`dashboard-final.html`) em todo run, espelhando `pipeline/data/dashboard-layout-reference.html`."
 icon: "📊"
 performance_mode: "Econômico"
 

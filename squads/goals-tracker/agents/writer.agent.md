@@ -126,7 +126,7 @@ Comentários na issue de arquitetura ou no sync técnico de quinta-feira.
 
 ## Integration
 
-- **Reads from:** `squads/goals-tracker/output/analysis-brief.md`; `squads/goals-tracker/output/research-snapshot.md` (apoio factual); `squads/goals-tracker/pipeline/data/output-examples.md` como referência de qualidade.
+- **Reads from:** `squads/goals-tracker/pipeline/data/squad-goals.md` (nomes e pesos das metas nos relatórios); `analysis-brief.md`; `research-snapshot.md` (apoio factual); `output-examples.md` como referência de qualidade.
 - **Writes to:** `squads/goals-tracker/output/leadership-report.md`, `squads/goals-tracker/output/team-report.md`
 - **Triggers:** Step `step-03-write` (Redação dos Relatórios)
 - **Depends on:** `step-02-analyze` e `analysis-brief.md` disponível.

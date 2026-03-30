@@ -123,7 +123,7 @@ Objetivo, em formato de inventário: tabelas, listas e referências de issue/cha
 
 ## Integration
 
-- **Reads from:** Parâmetros do run (período, projetos, boards, planilhas); `squads/goals-tracker/pipeline/data/research-brief.md` quando presente; dados ao vivo via Jira e Google Sheets.
+- **Reads from:** **`squads/goals-tracker/pipeline/data/squad-goals.md`** (metas canônicas — checklist obrigatório por run); parâmetros do run (`run-scope.md`, `memories.md`); `research-brief.md` quando presente; dados ao vivo via Jira e Google Sheets.
 - **Writes to:** `squads/goals-tracker/output/research-snapshot.md`
 - **Triggers:** Step `step-01-research` (Pesquisa de Dados)
 - **Depends on:** Entrada do usuário/checkpoint inicial; integrações `jira` e `google-sheets` disponíveis.

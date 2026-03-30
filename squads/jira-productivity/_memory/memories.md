@@ -3,6 +3,7 @@
 Este arquivo armazena aprendizados, preferências do usuário e histórico de execuções do squad.
 
 ## Aprendizados
+- **Sempre criar o HTML:** Em qualquer run ou pedido de relatório deste squad, a entrega **não** pode ficar só em markdown — é **obrigatório** gerar `dashboard-final.html` (regras detalhadas nos itens seguintes e no step 03).
 - **Escopo de projetos (usuário):** Em todas as pesquisas solicitadas pelo usuário, buscar sempre em: **INTS**, **IOAM**, **Alertas Integração** (projeto Jira `Alertas Integração`, chave de issue **AL**), **N3** (projeto Jira **N3**, chave de issue **NE**). Ajustar JQL e ferramentas conforme esses escopos.
 - **Membros do Time:** Em TODAS as buscas, extrações e análises, considere SEMPRE e EXCLUSIVAMENTE os seguintes responsáveis: "Adriel Henrique Borges Cochito", "Antonio Balardino", "Bruna Elis Vogel", "Daniel Cruz", "Wellington Casas", "Pedro Bittencourt", "Jonas Elan", "Maria Eduarda da Silva Joaquim".
 - O usuário prefere visualizações ricas (HTML/Dashboards) em vez de apenas texto markdown para a aprovação final e compartilhamento.

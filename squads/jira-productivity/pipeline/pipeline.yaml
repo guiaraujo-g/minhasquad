@@ -1,5 +1,5 @@
 name: "Jira Productivity Pipeline"
-description: "Extrai dados do Jira e gera relatórios executivos, gerenciais e para o time."
+description: "Extrai dados do Jira e gera relatórios (markdown) + sempre `dashboard-final.html` no output versionado do run (mesma pasta que `final-reports.md`)."
 
 steps:
   - id: step-01-checkpoint-params

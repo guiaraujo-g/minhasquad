@@ -115,7 +115,7 @@ Direta, com seções curtas e tabelas. Sempre separa **dado** (do snapshot) de *
 
 ## Integration
 
-- **Reads from:** `squads/goals-tracker/output/research-snapshot.md`; referências em `squads/goals-tracker/pipeline/data/domain-framework.md` e `quality-criteria.md` quando aplicável.
+- **Reads from:** `squads/goals-tracker/pipeline/data/squad-goals.md`; `squads/goals-tracker/output/research-snapshot.md`; `domain-framework.md` e `quality-criteria.md` quando aplicável.
 - **Writes to:** `squads/goals-tracker/output/analysis-brief.md`
 - **Triggers:** Step `step-02-analyze` (Análise e RAG)
 - **Depends on:** `step-01-research` e arquivo `research-snapshot.md` disponível.

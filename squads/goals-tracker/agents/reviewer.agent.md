@@ -119,7 +119,7 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 
 ## Integration
 
-- **Reads from:** `squads/goals-tracker/output/leadership-report.md`, `squads/goals-tracker/output/team-report.md`, `squads/goals-tracker/output/analysis-brief.md`, `squads/goals-tracker/output/research-snapshot.md`, `squads/goals-tracker/pipeline/data/quality-criteria.md`, `squads/goals-tracker/pipeline/data/anti-patterns.md`
+- **Reads from:** `squads/goals-tracker/pipeline/data/squad-goals.md` (verificar cobertura das quatro áreas de meta), `leadership-report.md`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`, `quality-criteria.md`, `anti-patterns.md`
 - **Writes to:** `squads/goals-tracker/output/review-notes.md` (e pode solicitar edições nos relatórios via feedback)
 - **Triggers:** Step `step-05-review` (Revisão dos Relatórios), após checkpoint `step-04-approve-content`
 - **Depends on:** `step-03-write`, artefatos de relatório disponíveis, e checkpoint de aprovação de conteúdo.

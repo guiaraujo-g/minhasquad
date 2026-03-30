@@ -12,6 +12,7 @@ skills:
   - google-sheets
 
 data:
+  - pipeline/data/squad-goals.md
   - pipeline/data/research-brief.md
   - pipeline/data/domain-framework.md
   - pipeline/data/quality-criteria.md

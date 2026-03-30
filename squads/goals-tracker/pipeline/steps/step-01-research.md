@@ -11,7 +11,9 @@ model_tier: fast
 ## Context Loading
 
 Load these files before executing:
-- `squads/goals-tracker/output/run-scope.md` — Escopo do run (período, filtros Jira, planilha/abas Google Sheets). Se não existir no diretório deste run, derive o escopo a partir de `squads/goals-tracker/_memory/memories.md`, `_opensquad/_memory/company.md` e da mensagem do usuário ao iniciar o pipeline; em seguida registre um resumo explícito (parágrafo + bullets) como conteúdo de `run-scope.md` antes de qualquer busca.
+- **`squads/goals-tracker/pipeline/data/squad-goals.md` — OBRIGATÓRIO.** Metas do semestre, pesos, links Jira/planilha e time. Toda coleta deve cobrir **cada linha** desse arquivo ou documentar lacuna em **Data gaps** (não ignorar silenciosamente).
+- `squads/goals-tracker/_memory/memories.md` — Aprendizados e pendências (ex.: épico de edição ainda não chaveado).
+- `squads/goals-tracker/output/run-scope.md` — Escopo do run (período, filtros Jira, planilha/abas Google Sheets). Se não existir no diretório deste run, derive a partir de **`squad-goals.md` + `memories.md`** + `_opensquad/_memory/company.md` + mensagem do usuário; inclua **URL/ID da planilha** e JQLs dos projetos listados em `squad-goals.md`; em seguida registre o resumo em `run-scope.md` antes de qualquer busca.
 - `squads/goals-tracker/pipeline/data/research-brief.md` — Referência de vocabulário e boas práticas de reporting executivo e de metas.
 - `squads/goals-tracker/pipeline/data/domain-framework.md` — Framework de ingestão, normalização e o que extrair de cada fonte.
 - `squads/goals-tracker/pipeline/data/anti-patterns.md` — Erros a evitar na coleta.
@@ -21,8 +23,8 @@ Siga as skills **jira** e **google-sheets** do agente para consultar fontes conf
 ## Instructions
 
 ### Process
-1. **Confirmar escopo:** Leia `run-scope.md` ou derive de memórias/company/chat; liste Jira (projetos/boards/épicos), datas, fuso e planilha (ID/URL, abas, ranges). Documente suposições e riscos no snapshot.
-2. **Coletar no Jira:** Work items/épicos das metas; status, bloqueios, dependências, labels, campos de saúde/SLA; registre JQL/board/filtros.
+1. **Confirmar escopo:** Leia `squad-goals.md` primeiro; alinhe `run-scope.md` aos projetos/épicos/planilha ali listados. Liste Jira (Alertas Integração, N3, INTS-645/659/643/662/587, etc.), datas, fuso e planilha (ID/URL, abas, ranges). Documente suposições e riscos no snapshot. **Período padrão:** se o usuário não fixar intervalo, usar o **mês civil atual** (do dia 1 ao último dia do mês na timezone do escopo, p.ex. America/Sao_Paulo) e registrar em `run-scope.md` e em **Run scope (frozen)** — consultas devem permitir reportar progresso **por meta definida em `squad-goals.md`**.
+2. **Coletar no Jira:** Para **cada** meta com fonte Jira em `squad-goals.md`, busque evidências (board, épico, projeto N3, etc.); status, bloqueios, dependências; registre JQL/board/filtros reprodutíveis.
 3. **Coletar no Google Sheets:** Abas acordadas; valores, metas, pesos, owners, timestamps; cite aba/range/coluna por métrica.
 4. **Normalizar e cruzar:** Alinhe nomes de metas entre Jira e planilha; quando houver divergência numérica ou de status, registre ambas as leituras e marque inconsistência. Não atribua RAG — apenas fatos e referências.
 5. **Escrever o snapshot:** Preencha `research-snapshot.md` com o formato obrigatório abaixo, datado com horário de corte e limitações explícitas.

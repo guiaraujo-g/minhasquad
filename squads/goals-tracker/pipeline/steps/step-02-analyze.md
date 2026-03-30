@@ -10,6 +10,7 @@ outputFile: squads/goals-tracker/output/analysis-brief.md
 ## Context Loading
 
 Load these files before executing:
+- `squads/goals-tracker/pipeline/data/squad-goals.md` — Metas canônicas do semestre; cada tema listado deve ter RAG (ou lacuna justificada) no brief.
 - `squads/goals-tracker/output/research-snapshot.md` — Snapshot de pesquisa produzido pelo Rafael Relatório.
 - `squads/goals-tracker/pipeline/data/domain-framework.md` — Metodologia de impedimentos, Five Whats e ligação meta ↔ bloqueio.
 - `squads/goals-tracker/pipeline/data/research-brief.md` — Contexto de reporting e vocabulário de negócio.
@@ -18,8 +19,8 @@ Load these files before executing:
 ## Instructions
 
 ### Process
-1. **Ingerir o snapshot:** Valide completude; se faltar dado crítico para uma meta, classifique o gap e evite inferências não suportadas pelo snapshot.
-2. **Calcular ou atribuir RAG:** Para cada meta ou tema semestral relevante, atribua **Red / Amber / Green** com critérios explícitos (prazo, confiança, dependência, evidência numérica da planilha e do Jira). Use uma legenda única no brief.
+1. **Ingerir o snapshot:** Cruzar com **`squad-goals.md`**: para **cada** meta definida lá (Gestão de alertas, Eficiência máxima, Suporte integrado, Produtividade), verifique se o snapshot trouxe dado ou lacuna. Se faltar dado crítico, classifique o gap e evite inferências não suportadas.
+2. **Calcular ou atribuir RAG:** Para **cada linha de meta** em `squad-goals.md` (ou sub-tema com peso), atribua **Red / Amber / Green** com critérios explícitos e evidência citada ao snapshot. Use uma legenda única no brief.
 3. **Mapear bloqueios:** Liste impedimentos com estrutura **Five Whats** (fazendo, bloqueado por, impacto, tentativas, resolução ideal) onde o snapshot trouxe evidência; marque `Unknown` apenas quando o snapshot não tiver dado.
 4. **Priorizar para liderança vs time:** Separe itens que exigem decisão de liderança (escalação, dependência externa, trade-off de prazo) dos que o time pode destravar sozinho.
 5. **Produzir o brief:** Escreva `analysis-brief.md` no formato abaixo, em tom analítico e acionável, sem redigir os relatórios finais.
