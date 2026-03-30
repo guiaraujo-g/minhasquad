@@ -16,7 +16,7 @@ export function QuickRangeLinks({ thisMonthFrom, thisMonthTo }: Props) {
         <Link className="link-btn link-secondary" href={q(thisMonthFrom, thisMonthTo)}>
           Mês atual
         </Link>
-        <Link className="link-btn link-secondary" href="/?sprint=current">
+        <Link className="link-btn link-secondary" href="/?sprint=current" prefetch={false}>
           Sprint atual
         </Link>
       </div>

@@ -17,8 +17,9 @@ export function DiretoriaSection({ data }: Props) {
 
         <div className="highlight-box">
           <strong>Resumo:</strong> Indicadores consolidados do período{" "}
-          <strong>{data.periodLabelBr}</strong> — AL (alertas), N3 (NE) filtrado pelo time quando
-          configurado, e SP em sprint aberta INTS+IOAM quando a API responder.
+          <strong>{data.periodLabelBr}</strong> — AL (alertas), N3 (projeto configurável, ex. NE/N3)
+          com o mesmo filtro de time que o squad (displayName por padrão), e SP em sprint aberta
+          INTS+IOAM quando a API responder.
         </div>
 
         <div className="metric-grid">
@@ -33,7 +34,24 @@ export function DiretoriaSection({ data }: Props) {
             <div className="metric-label">Tickets N3 resolvidos (time)</div>
             <div className="metric-value">{n3Val}</div>
             <div className="metric-label">
-              {data.n3Note ?? "Projeto NE · apenas assignees em JIRA_TEAM_ACCOUNT_IDS"}
+              {data.n3Note ??
+                "Filtro assignee alinhado ao squad (veja README: JIRA_TEAM_FILTER_MODE)."}
+            </div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">SLA N3 (≤48h criado → resolução)</div>
+            <div className="metric-value">
+              {data.n3Sla ? `${data.n3Sla.within48h} / ${data.n3Sla.n}` : "—"}
+            </div>
+            <div className="metric-label">
+              {data.n3Sla ? (
+                <>
+                  {data.n3Sla.sharePercent}% no prazo · meta {data.n3Sla.targetPercent}%
+                  {data.n3Sla.note ? ` · ${data.n3Sla.note}` : ""}
+                </>
+              ) : (
+                "Ativo quando o filtro de time N3 está configurado."
+              )}
             </div>
           </div>
           <div className="metric-card">

@@ -1,6 +1,7 @@
 # Quality Criteria: Executive Reporting & Goal Tracking
 
 ## Leadership Report Criteria
+- [ ] **Canonical layout (obrigatório em todo run):** O `leadership-report.md` contém **apenas** as quatro seções, nesta ordem: Resumo executivo (1 frase + 2–4 bullets) → Status das metas (RAG), quatro áreas de `squad-goals.md` → Impedimentos e decisões (Five Whats) → Próximos passos recomendados. **Sem** Painel gestor, Painel de progresso, seções A–E, RAG em tabela duplicada. O `leadership-report.html` espelha o run `2026-03-26-112700`: **um** `progressChart` Chart.js; sem painel gestor HTML nem gráficos extras. Ver `pipeline/steps/step-03-write.md`.
 - [ ] **30-60 Second Test:** A stakeholder can read the report in under a minute and answer: current status, what's in flight, and what must be unblocked.
 - [ ] **Decision Test:** Every highlighted risk or impediment implies a plausible management action or decision.
 - [ ] **Bounded Surface:** Presents a maximum of 4-6 top-level metrics/goals without overwhelming technical detail.

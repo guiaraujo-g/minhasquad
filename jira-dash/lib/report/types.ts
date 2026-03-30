@@ -10,6 +10,22 @@ export type PivotRow = {
   total: number;
 };
 
+export type JqlSnapshotItem = {
+  id: string;
+  label: string;
+  jql: string;
+};
+
+/** SLA N3 em até 48h (Goals Tracker); null se escopo N3 inativo. */
+export type N3SlaSummary = {
+  n: number;
+  within48h: number;
+  sharePercent: number;
+  targetPercent: number;
+  /** Lacunas (ex.: tickets sem created). */
+  note: string | null;
+};
+
 export type ReportDTO = {
   period: { from: string; to: string };
   periodLabelBr: string;
@@ -20,12 +36,16 @@ export type ReportDTO = {
   /** Soma de SP em sprint aberta INTS+IOAM; null se a consulta falhar. */
   sprintSpTotal: number | null;
   sprintSpNote: string | null;
-  /** N3 (NE) resolvido no período só pelo time; null sem JIRA_TEAM_ACCOUNT_IDS. */
+  /** N3 (NE) resolvidos no período pelo time (filtro squad); null se escopo N3 inativo. */
   n3ResolvedTeamTotal: number | null;
   n3Note: string | null;
   n3ResolvedByAssignee: CountRow[];
   intIoamSpCompletedByAssignee: SpRow[];
   metaSpPerPerson: number;
+  /** JQL usada neste run (diff com raw-metrics.md). */
+  jqlUsed: JqlSnapshotItem[];
+  /** SLA created → resolution ≤ 48h, meta 50%. */
+  n3Sla: N3SlaSummary | null;
   historico: {
     months: HistoricoMonth[];
     spPivot: PivotRow[];

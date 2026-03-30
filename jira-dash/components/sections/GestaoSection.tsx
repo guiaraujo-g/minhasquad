@@ -118,8 +118,8 @@ export function GestaoSection({ data }: Props) {
 
         <h3 className="section-h3">Tickets N3 resolvidos pelo time (período)</h3>
         <p className="stub-note">
-          Somente se <code>JIRA_TEAM_ACCOUNT_IDS</code> estiver definido; caso contrário a tabela pode
-          ficar vazia.
+          Com <code>JIRA_TEAM_FILTER_MODE=displayName</code> (padrão) o filtro usa os nomes do time em
+          código; com <code>accountId</code> é preciso <code>JIRA_TEAM_ACCOUNT_IDS</code>.
         </p>
         {data.n3ResolvedByAssignee.length === 0 ? (
           <p className="stub-note">Sem dados de N3 filtrados pelo time neste período.</p>

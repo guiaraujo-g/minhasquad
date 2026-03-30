@@ -1,5 +1,6 @@
 import { DateRangeForm } from "@/components/DateRangeForm";
 import { QuickRangeLinks } from "@/components/QuickRangeLinks";
+import { ReportJqlPanel } from "@/components/ReportJqlPanel";
 import { DiretoriaSection } from "@/components/sections/DiretoriaSection";
 import { GestaoSection } from "@/components/sections/GestaoSection";
 import { HistoricoSection } from "@/components/sections/HistoricoSection";
@@ -86,6 +87,7 @@ export default async function Home({ searchParams }: PageProps) {
       <DiretoriaSection data={data} />
       <GestaoSection data={data} />
       <HistoricoSection data={data} />
+      <ReportJqlPanel items={data.jqlUsed} />
     </div>
   );
 }

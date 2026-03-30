@@ -368,3 +368,52 @@ details.report-collapsible > summary.report-collapsible-summary h2 {
   border: none;
   padding: 0;
 }
+
+.report-jql-footer {
+  margin: 24px 0 40px;
+  padding: 20px 24px;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid #dfe1e6;
+}
+
+.report-jql-heading {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+}
+
+.report-jql-intro {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+
+.jql-snapshot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jql-block-label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--secondary-color);
+  margin-bottom: 6px;
+}
+
+.jql-block-code {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--bg-color);
+  border-radius: 6px;
+  border: 1px solid #dfe1e6;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.jql-block-code code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}

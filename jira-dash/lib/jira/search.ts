@@ -58,6 +58,25 @@ export async function searchTotal(cfg: JiraClientConfig, jql: string): Promise<n
 
 const PAGE_SIZE = 100;
 
+/** Contagem exata paginando `search/jql` (mais lenta; alinha a runs do squad sem approximate-count). */
+export async function searchExactIssueCount(cfg: JiraClientConfig, jql: string): Promise<number> {
+  let count = 0;
+  let nextPageToken: string | undefined;
+  for (;;) {
+    const res = await searchIssuesPage(cfg, {
+      jql,
+      maxResults: PAGE_SIZE,
+      fields: ["key"],
+      nextPageToken,
+    });
+    count += res.issues.length;
+    if (res.isLast || res.issues.length === 0) break;
+    if (!res.nextPageToken) break;
+    nextPageToken = res.nextPageToken;
+  }
+  return count;
+}
+
 /** Paginação por nextPageToken até isLast. */
 export async function searchAllIssues(
   cfg: JiraClientConfig,

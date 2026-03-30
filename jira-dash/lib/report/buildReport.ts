@@ -2,9 +2,13 @@ import {
   MAX_REPORT_RANGE_DAYS,
   META_SP_PER_PERSON,
   PIVOT_MAX_MONTHS,
+  PROJECT_KEYS,
   TEAM_DISPLAY_NAMES,
+  exactIssueCountsEnabled,
+  n3TeamScopeActive,
+  N3_SLA_MAX_HOURS,
+  N3_SLA_TARGET_PERCENT,
   storyPointsFieldId,
-  teamAccountIds,
 } from "../config";
 import {
   firstDayUtc,
@@ -25,9 +29,18 @@ import {
   jqlIntsIoamResolvedInRange,
   jqlNeResolvedInRange,
 } from "../jira/jql";
-import { searchAllIssues, searchTotal } from "../jira/search";
+import { searchAllIssues, searchExactIssueCount, searchTotal } from "../jira/search";
 import type { JiraIssue } from "../jira/search";
-import type { CountRow, HistoricoMonth, PivotRow, ReportDTO, ReportResult, SpRow } from "./types";
+import type {
+  CountRow,
+  HistoricoMonth,
+  JqlSnapshotItem,
+  N3SlaSummary,
+  PivotRow,
+  ReportDTO,
+  ReportResult,
+  SpRow,
+} from "./types";
 
 function assigneeName(fields: Record<string, unknown>): string {
   const a = fields.assignee as { displayName?: string } | null | undefined;
@@ -48,6 +61,67 @@ function storyPointsFrom(fields: Record<string, unknown>, fieldId: string): numb
     return Number.isFinite(n) ? n : 0;
   }
   return 0;
+}
+
+function parseJiraDateTime(iso: unknown): number | null {
+  if (typeof iso !== "string" || iso.length < 10) return null;
+  const t = Date.parse(iso);
+  return Number.isFinite(t) ? t : null;
+}
+
+function computeN3Sla(issues: JiraIssue[]): N3SlaSummary {
+  let within = 0;
+  let missing = 0;
+  const maxMs = N3_SLA_MAX_HOURS * 60 * 60 * 1000;
+  for (const iss of issues) {
+    const c = parseJiraDateTime(iss.fields.created);
+    const r = parseJiraDateTime(iss.fields.resolutiondate);
+    if (c === null || r === null) {
+      missing++;
+      continue;
+    }
+    if (r - c <= maxMs) within++;
+  }
+  const n = issues.length;
+  const share = n > 0 ? (100 * within) / n : 0;
+  return {
+    n,
+    within48h: within,
+    sharePercent: Math.round(share * 100) / 100,
+    targetPercent: N3_SLA_TARGET_PERCENT,
+    note:
+      missing > 0
+        ? `${missing} ticket(s) sem created ou resolutiondate utilizável.`
+        : null,
+  };
+}
+
+async function issueCount(cfg: JiraClientConfig, jql: string): Promise<number> {
+  if (exactIssueCountsEnabled()) {
+    return searchExactIssueCount(cfg, jql);
+  }
+  return searchTotal(cfg, jql);
+}
+
+function buildJqlSnapshot(from: string, to: string): JqlSnapshotItem[] {
+  const items: JqlSnapshotItem[] = [
+    { id: "al_created", label: "AL criados no período", jql: jqlAlCreatedInRange(from, to) },
+    { id: "al_resolved", label: "AL resolvidos no período", jql: jqlAlResolvedInRange(from, to) },
+    {
+      id: "ints_ioam_resolved",
+      label: "INTS+IOAM resolvidos no período",
+      jql: jqlIntsIoamResolvedInRange(from, to),
+    },
+    { id: "ints_ioam_open_sprint", label: "INTS+IOAM · sprint aberta (soma SP)", jql: jqlIntsIoamOpenSprint() },
+  ];
+  if (n3TeamScopeActive()) {
+    items.splice(3, 0, {
+      id: "ne_resolved_team",
+      label: `${PROJECT_KEYS.ne} (N3) resolvidos no período · time`,
+      jql: jqlNeResolvedInRange(from, to),
+    });
+  }
+  return items;
 }
 
 function resolutionMonthKey(fields: Record<string, unknown>): string | null {
@@ -170,11 +244,10 @@ async function safeSprintSpTotal(cfg: JiraClientConfig, spField: string): Promis
 
 async function computeReport(cfg: JiraClientConfig, from: string, to: string): Promise<ReportResult> {
   const spField = storyPointsFieldId();
-  const ids = teamAccountIds();
-  const n3Configured = ids.length > 0;
+  const n3Active = n3TeamScopeActive();
 
-  const alCreatedTotalP = searchTotal(cfg, jqlAlCreatedInRange(from, to));
-  const alResolvedTotalP = searchTotal(cfg, jqlAlResolvedInRange(from, to));
+  const alCreatedTotalP = issueCount(cfg, jqlAlCreatedInRange(from, to));
+  const alResolvedTotalP = issueCount(cfg, jqlAlResolvedInRange(from, to));
   const alResolvedIssuesP = searchAllIssues(cfg, jqlAlResolvedInRange(from, to), [
     "assignee",
     "priority",
@@ -187,11 +260,15 @@ async function computeReport(cfg: JiraClientConfig, from: string, to: string): P
     "resolutiondate",
   ]);
 
-  const n3TotalP = n3Configured
-    ? searchTotal(cfg, jqlNeResolvedInRange(from, to))
+  const n3TotalP = n3Active
+    ? issueCount(cfg, jqlNeResolvedInRange(from, to))
     : Promise.resolve(0);
-  const n3IssuesP = n3Configured
-    ? searchAllIssues(cfg, jqlNeResolvedInRange(from, to), ["assignee", "resolutiondate"])
+  const n3IssuesP = n3Active
+    ? searchAllIssues(cfg, jqlNeResolvedInRange(from, to), [
+        "assignee",
+        "resolutiondate",
+        "created",
+      ])
     : Promise.resolve([] as JiraIssue[]);
 
   const sprintP = safeSprintSpTotal(cfg, spField);
@@ -210,7 +287,7 @@ async function computeReport(cfg: JiraClientConfig, from: string, to: string): P
     "assignee",
     "resolutiondate",
   ]);
-  const histNeP = n3Configured
+  const histNeP = n3Active
     ? searchAllIssues(cfg, jqlNeResolvedInRange(histFrom, histTo), [
         "assignee",
         "resolutiondate",
@@ -254,9 +331,11 @@ async function computeReport(cfg: JiraClientConfig, from: string, to: string): P
     sumSpByAssignee(intIoamIssues, spField),
   );
 
-  const n3ResolvedByAssignee = n3Configured
+  const n3ResolvedByAssignee = n3Active
     ? sortCountRowsTeamFirst(countByLabels(n3Issues, assigneeName))
     : [];
+
+  const n3Sla: N3SlaSummary | null = n3Active ? computeN3Sla(n3Issues) : null;
 
   const months: HistoricoMonth[] = monthKeys.map((key) => ({
     key,
@@ -265,7 +344,7 @@ async function computeReport(cfg: JiraClientConfig, from: string, to: string): P
 
   const spPivot = buildPivotSpRows(histIntIoam, monthKeys, spField);
   const alResolvedPivot = buildPivotCountRows(histAl, monthKeys);
-  const n3Pivot = n3Configured ? buildPivotCountRows(histNe, monthKeys) : [];
+  const n3Pivot = n3Active ? buildPivotCountRows(histNe, monthKeys) : [];
 
   const data: ReportDTO = {
     period: { from, to },
@@ -276,13 +355,15 @@ async function computeReport(cfg: JiraClientConfig, from: string, to: string): P
     alCreatedByPriority,
     sprintSpTotal: sprint.total,
     sprintSpNote: sprint.note,
-    n3ResolvedTeamTotal: n3Configured ? n3Total : null,
-    n3Note: n3Configured
+    n3ResolvedTeamTotal: n3Active ? n3Total : null,
+    n3Note: n3Active
       ? null
-      : "Defina JIRA_TEAM_ACCOUNT_IDS para filtrar N3 (NE) resolvido apenas pelo time.",
+      : "Sem filtro de time para N3: o padrão é displayName (nomes em código); ou use JIRA_TEAM_FILTER_MODE=accountId e JIRA_TEAM_ACCOUNT_IDS.",
     n3ResolvedByAssignee,
     intIoamSpCompletedByAssignee,
     metaSpPerPerson: META_SP_PER_PERSON,
+    jqlUsed: buildJqlSnapshot(from, to),
+    n3Sla,
     historico: {
       months,
       spPivot,

@@ -33,12 +33,13 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 ## Operational Framework
 
 ### Process
-1. **Carregar contexto:** Leia `squads/goals-tracker/pipeline/data/quality-criteria.md`, `anti-patterns.md`, e os artefatos `leadership-report.md`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`.
+1. **Carregar contexto:** Leia `squads/goals-tracker/pipeline/data/quality-criteria.md`, `anti-patterns.md`, `pipeline/steps/step-03-write.md` (layout canônico), e os artefatos `leadership-report.md`, `leadership-report.html`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`.
 2. **Auditoria de liderança:** Verifique executive summary, densidade de métricas (4–6 metas no topo), ligação de risco a ação, Five Whats completos onde bloqueios são destacados, e ausência de vaidade técnica.
 3. **Auditoria de time:** Verifique alinhamento às metas do semestre, transparência sobre bloqueios, reconhecimentos específicos, ausência de buzzwords e de siglas não decodificadas, e seção de envolvimento com próximo passo claro.
-4. **Checagem cruzada:** Compare números, RAG e keys citadas entre relatórios e brief/snapshot; marque divergências.
-5. **Registrar notas:** Escreva `review-notes.md` com status (aprovado / aprovado com ressalvas / devolvido), lista de issues por severidade, e mudanças sugeridas ou aplicadas.
-6. **Se devolver:** Liste exatamente o que o escritor deve corrigir; não reabra discussão de dados — só comunicação e aderência.
+4. **Layout fixo (liderança):** Rejeitar se o markdown de liderança não for só as quatro seções na ordem do run `2026-03-26-112700`, ou se o HTML tiver mais de um gráfico Chart.js / painel gestor / seções A–E.
+5. **Checagem cruzada:** Compare números, RAG e keys citadas entre relatórios e brief/snapshot; marque divergências.
+6. **Registrar notas:** Escreva `review-notes.md` com status (aprovado / aprovado com ressalvas / devolvido), lista de issues por severidade, e mudanças sugeridas ou aplicadas.
+7. **Se devolver:** Liste exatamente o que o escritor deve corrigir; não reabra discussão de dados — só comunicação e aderência.
 
 ### Decision Criteria
 - **Aprovar:** Critérios atendidos, dados consistentes, tom adequado; issues apenas cosméticas.
@@ -67,7 +68,7 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 
 ### Example 1: Trecho de review-notes.md (aprovação com ressalvas)
 **Status:** Aprovado com ressalvas  
-**Artefatos:** `leadership-report.md`, `team-report.md`  
+**Artefatos:** `leadership-report.md`, `leadership-report.html`, `team-report.md`  
 **Data:** 2026-03-26
 
 **Critérios (leadership)**
@@ -111,6 +112,7 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 ## Quality Criteria
 
 - [ ] Cada item de `quality-criteria.md` foi verificado para ambos os relatórios (ou marcado N/A com motivo).
+- [ ] Padrão canônico de liderança (`2026-03-26-112700` / `step-03-write.md`) verificado em `.md` e `.html`.
 - [ ] Números, RAG e keys conferem com `analysis-brief.md` / `research-snapshot.md`.
 - [ ] Impedimentos de liderança passam no teste de decisão e Five Whats quando aplicável.
 - [ ] Tom de time sem buzzwords; tom de liderança sem excesso técnico inútil.
@@ -119,7 +121,7 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 
 ## Integration
 
-- **Reads from:** `squads/goals-tracker/pipeline/data/squad-goals.md` (verificar cobertura das quatro áreas de meta), `leadership-report.md`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`, `quality-criteria.md`, `anti-patterns.md`
+- **Reads from:** `squads/goals-tracker/pipeline/data/squad-goals.md` (verificar cobertura das quatro áreas de meta), `leadership-report.md`, `leadership-report.html`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`, `quality-criteria.md`, `anti-patterns.md`, `pipeline/steps/step-03-write.md`
 - **Writes to:** `squads/goals-tracker/output/review-notes.md` (e pode solicitar edições nos relatórios via feedback)
 - **Triggers:** Step `step-05-review` (Revisão dos Relatórios), após checkpoint `step-04-approve-content`
 - **Depends on:** `step-03-write`, artefatos de relatório disponíveis, e checkpoint de aprovação de conteúdo.

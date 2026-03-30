@@ -7,10 +7,12 @@ outputFile: squads/goals-tracker/output/leadership-report.md
 
 # Step 03: Redação — Relatório de Liderança e Relatório de Time
 
+**Regra persistente:** Em **qualquer** solicitação de novo ou atualizado relatório de liderança, manter **sempre** o padrão canônico do run `2026-03-26-112700` (ver `_memory/memories.md` → “Padrão fixo”). Não alternar para layout longo salvo mudança explícita de produto nesses arquivos.
+
 ## Context Loading
 
 Load these files before executing:
-- `squads/goals-tracker/pipeline/data/squad-goals.md` — Nomes e pesos das metas; o painel e o **Status das metas (RAG)** devem refletir **estas** categorias (não substituir por outro framework).
+- `squads/goals-tracker/pipeline/data/squad-goals.md` — Nomes e pesos das metas; o **Status das metas (RAG)** deve cobrir **estas** quatro áreas (não substituir por outro framework).
 - `squads/goals-tracker/output/analysis-brief.md` — RAG, bloqueios e notas para o escritor produzidos por Alice Análise.
 - `squads/goals-tracker/output/research-snapshot.md` — Conferência de números e fontes quando o brief citar dados crus.
 - `squads/goals-tracker/pipeline/data/output-examples.md` — Exemplos de tom e estrutura dos dois relatórios.
@@ -20,29 +22,18 @@ Load these files before executing:
 ## Instructions
 
 ### Process
-1. **Planejar:** Do brief, extraia resumo executivo, RAG por meta, bloqueios e decisões para liderança; para o time, foco, entregas, travamentos e reconhecimentos.
-2. **Painel gestor (obrigatório, primeiro):** Logo após o título/cabeçalho, agrupe por **meta agregada** como em `squad-goals.md` (quatro seções numeradas). Para cada seção, use um **subtítulo** com o mesmo título do arquivo (ex.: “1. Gestão de alertas — meta agregada 100%”) e, abaixo, **lista com bullets**: cada linha = **Situação** (uma de: **Andando** | **Parado** | **Não medido** | **Abaixo da meta**) + **nome do critério** (com peso/chave Jira quando existir) + **evidência** em texto. Inclua critérios operacionais extras (ex.: throughput alertas na amostra MCP) **dentro** da seção de alertas, após os critérios formais da tabela, quando o snapshot trouxer dado. **Definições:** *Andando* = execução ou avanço com evidência; *Parado* = fila/backlog sem tração ou sem trilha; *Não medido* = busca não feita ou impossível; *Abaixo da meta* = medido e abaixo do alvo. **Alertas SLA:** nunca “Não medido” se o snapshot tiver rodado `search_jira` da `jira-queries.md`. Em seguida, bloco **Decisões da semana** com **3 itens acionáveis**.
-3. **Painel de progresso (obrigatório):** Depois do painel gestor, o leitor deve enxergar **números e estados** alinhados a **`squad-goals.md`**: uma linha ou bloco por **meta agregada** (Gestão de alertas, Eficiência máxima, Suporte integrado, Produtividade), com *Alvo formal* (texto/peso do arquivo) | *Real no período* (snapshot) | *Como ler*. Separe meta de planilha vs Jira quando aplicável. Inclua também visão operacional (épicos Entrega/fila, throughput) quando o snapshot trouxer. Sem inventar % de planilha quando o snapshot marcar lacuna.
-4. **Redigir o Relatório de Liderança:** Salve em `leadership-report.md` (caminho `outputFile` deste passo). Inclua **Painel gestor** (item 2) e **Painel de progresso** (item 3); depois resumo executivo, RAG, Five Whats e próximos passos. Máximo 4–6 KPIs ou metas em destaque; traduza para impacto de negócio; cada risco deve implicar uma ação de gestão.
-5. **Redigir o Relatório de Time:** Salve em `team-report.md` no **mesmo diretório versionado** do run que `leadership-report.md`. Abra com **Painel rápido** (tabela pergunta/resposta com os mesmos números do snapshot/brief). Tom colaborativo; reconhecimentos com nomes e feitos concretos quando o snapshot/brief permitir.
-6. **HTML (recomendado no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`. No HTML de liderança, coloque **no topo** (antes do painel de progresso detalhado) o **Painel gestor**: **um bloco por meta agregada** (`div.gestor-meta-group`), com `h3.gestor-meta-title` + `ul.gestor-meta-list` e **badges** de cor (Andando / Parado / Não medido / Abaixo da meta) em cada `li`, espelhando o markdown; depois **Decisões da semana**. Replique barras/gráficos (ex.: Chart.js) para throughput e distribuição Entrega/fila abaixo.
-7. **Consistência:** Alinhe números, datas e keys entre os dois relatórios, o snapshot e os HTML; divergências não resolvidas → risco no texto de liderança.
-8. **Auto-verificação:** Confira `quality-criteria.md` para cada relatório.
+1. **Planejar:** Do brief e `research-snapshot.md`, extraia resumo executivo (1 frase + 2–4 bullets), RAG pelas quatro áreas de `squad-goals.md`, bloqueios no formato Five Whats e próximos passos para liderança; para o time, foco, entregas, travamentos e reconhecimentos.
+2. **Relatório de Liderança (formato canônico — espelho do run `2026-03-26-112700`):** Salve em `leadership-report.md` (caminho `outputFile`). **Ordem fixa:** apenas `#` título, `## Resumo executivo (1 frase + 2–4 bullets)`, `## Status das metas (RAG)`, `## Impedimentos e decisões (Five Whats)`, `## Próximos passos recomendados (liderança)`. Narrativa executiva; números alinhados ao snapshot. **Proibido** neste arquivo: “Painel gestor”, “Painel de progresso”, seções A–E, tabelas operacionais longas, segundo RAG em tabela, badges Andando/Parado, bloco “Decisões da semana” separado do Five Whats.
+3. **Redigir o Relatório de Time:** Salve em `team-report.md` no **mesmo diretório versionado** do run que `leadership-report.md`. Abra com **Painel rápido** (tabela pergunta/resposta com os mesmos números do snapshot/brief). Tom colaborativo; reconhecimentos com nomes e feitos concretos quando o snapshot/brief permitir.
+4. **HTML (obrigatório no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`. O **`leadership-report.html`** deve seguir **o mesmo layout** que `squads/goals-tracker/output/2026-03-26-112700/v1/leadership-report.html`: `<h1>`, `## Resumo executivo` em `.highlight`, **um único** gráfico Chart.js `progressChart` (barras **Atual** vs **Meta**, sete rótulos: Tempo Alertas, Saúde Integrações, Eficiência Máxima, Tickets/Integração, SLA Tickets &lt; 48h, Cobertura Workflows, Produtividade), depois RAG em lista com classes `rag-green` / `rag-amber` / `rag-red`, Five Whats, próximos passos. **Sem** painel gestor, doughnuts extras, gráficos de governança nem seções A–E. Preencha `datasets` com valores do snapshot (como no run de referência).
+5. **Consistência:** Alinhe números, datas e keys entre os dois relatórios, o snapshot e os HTML; divergências não resolvidas → risco no texto de liderança.
+6. **Auto-verificação:** Confira `quality-criteria.md` para cada relatório.
 
 ## Output Format
 
-The primary file `leadership-report.md` MUST follow this exact structure:
+The primary file `leadership-report.md` MUST follow this exact structure (same as run `2026-03-26-112700`):
 ```markdown
 # Relatório de Liderança — Goals Tracker
-
-## Painel gestor — por meta agregada
-(Legenda das quatro situações. Quatro subseções `### 1.` … `### 4.` com os títulos de `squad-goals.md`; em cada uma, bullets `- **Situação** — **Critério** — evidência…`.)
-
-### Decisões da semana
-(3 itens acionáveis.)
-
-## Painel de progresso — como enxergar as metas
-(Explicar em 1 parágrafo: meta formal vs Jira. Tabelas A/B/C: throughput com % da amostra; épicos por bucket Entrega / fila / arquivado com keys; planilha indicando indisponível se aplicável.)
 
 ## Resumo executivo (1 frase + 2–4 bullets)
 **Frase:** ...
@@ -50,15 +41,18 @@ The primary file `leadership-report.md` MUST follow this exact structure:
 - ...
 
 ## Status das metas (RAG)
-(Cobrir as quatro áreas de `squad-goals.md` — Gestão de alertas, Eficiência máxima, Suporte ao cliente integrado, Produtividade — com sub-itens/pesos quando o brief tiver granularidade.)
-- **[Nome da meta]:** [🟢/🟡/🔴] [1–2 linhas com evidência e implicação]
+- **Gestão de alertas:** [🟢/🟡/🔴] ...
+- **Eficiência máxima:** ...
+- **Suporte integrado:** ...
+- **Produtividade:** ...
 
 ## Impedimentos e decisões (Five Whats)
-1. ...
+1. **Título curto** — Bloqueado por …; impacto …; ideal: …
 2. ...
 
 ## Próximos passos recomendados (liderança)
 1. ...
+2. ...
 ```
 
 The secondary file `team-report.md` MUST follow this exact structure:
@@ -133,6 +127,7 @@ Comentários na INTS-645 ou sync de quinta-feira.
 Reject and redo if ANY of these are true:
 1. Os dois arquivos não foram salvos (`leadership-report.md` e `team-report.md`) no mesmo run, ou um deles está ausente.
 2. O Relatório de Liderança usa métricas de vaidade sem ligação a resultado (ex.: story points isolados) ou omite decisões claras onde há bloqueio âmbar ou vermelho.
+3. `leadership-report.md` ou `leadership-report.html` inclui **Painel gestor**, **Painel de progresso**, seções **A–E**, múltiplos gráficos Chart.js além de `progressChart`, ou estrutura diferente do run de referência `2026-03-26-112700`.
 
 ## Quality Criteria
 

@@ -1,5 +1,14 @@
 # Goals Tracker — memória persistente
 
+## Padrão fixo — todo novo relatório de liderança
+
+**Sempre** que for gerado ou reescrito o relatório de liderança (Markdown + HTML), seguir **exatamente** o formato do run de referência:
+
+- **Markdown:** `squads/goals-tracker/output/2026-03-26-112700/v1/leadership-report.md` — só estas seções, nesta ordem: `## Resumo executivo (1 frase + 2–4 bullets)` → `## Status das metas (RAG)` → `## Impedimentos e decisões (Five Whats)` → `## Próximos passos recomendados (liderança)`.
+- **HTML:** `.../2026-03-26-112700/v1/leadership-report.html` — um único gráfico Chart.js `progressChart` (Atual vs Meta, sete rótulos); **sem** painel gestor, doughnuts extras, seções A–E nem segundo gráfico de governança.
+
+Instruções normativas: `pipeline/steps/step-03-write.md` (veto se desviar). Não reintroduzir o layout longo (painel por meta, tabelas A–E) sem alteração explícita deste arquivo e do passo 03.
+
 ## Metas do semestre (automático em todo run)
 
 As **definições canônicas** de metas (pesos, Jira, planilha, épico, time) estão em:

@@ -1,25 +1,31 @@
 # Output Examples: Executive Reporting & Goal Tracking
 
-## Example 1: Leadership Report
+> **Estrutura obrigatória do relatório de liderança:** em todo run, o `.md` e o `.html` devem seguir o mesmo molde que `squads/goals-tracker/output/2026-03-26-112700/v1/leadership-report.*` — ver `pipeline/steps/step-03-write.md`. Não usar painel gestor nem seções A–E no markdown de liderança.
 
-**Executive Summary:**
-A equipe de desenvolvimento entregou a nova plataforma de integração para providers, reduzindo o tempo de onboarding de clientes em 15%.
-- Nova plataforma habilitada para RM Totvs e ADP API.
-- Saúde das integrações mantida em 100% esta semana.
-- Próximo passo: Habilitar edição de integração; dependência de aprovação de arquitetura até sexta-feira.
+## Example 1: Leadership Report (markdown — headings exatos)
 
-**Status das Metas (Semestre Jan-Jul 2026):**
-- **Gestão de Alertas (Meta: 100%):** 🟢 On Track. Tempo de resolução < 2 dias (45/50%). Saúde (50/50%).
-- **Eficiência Máxima (Meta: Zero pendências):** 🟡 At Risk. Plataforma habilitada (20/20%). Edição pendente (0/20%). Exame médico/Vagas em andamento (20/40%). Workflows customizados não iniciados (0/20%).
-- **Suporte Integrado (Meta: 100%):** 🟢 On Track. Tickets/integração em 1.2 (50/50%). SLA < 48h mantido (50/50%).
-- **Produtividade Dev:** 🟢 On Track. Cobertura de workflows em 85% (rumo a 90%). Produtividade em 28 pontos/sprint (rumo a 30).
+```markdown
+# Relatório de Liderança — Goals Tracker
 
-**Impedimentos e Decisões Necessárias:**
-1. **Fazendo:** Habilitar edição de integração via plataforma.
-2. **Bloqueado por:** Falta de definição de arquitetura para o módulo de edição.
-3. **Impacto:** Atrasa o cronograma do épico INTS-645 em 1 sprint; risco para a meta de eficiência máxima.
-4. **Tentativas:** Reuniões com o time de arquitetura, proposta de design temporário rejeitada.
-5. **Resolução Ideal:** Decisão do CTO sobre a abordagem arquitetural até sexta-feira. Responsável: [Nome do Líder].
+## Resumo executivo (1 frase + 2–4 bullets)
+**Frase:** …
+- …
+- …
+
+## Status das metas (RAG)
+- **Gestão de alertas:** …
+- **Eficiência máxima:** …
+- **Suporte integrado:** …
+- **Produtividade:** …
+
+## Impedimentos e decisões (Five Whats)
+1. **Título** — Bloqueado por …; impacto …; ideal: …
+2. …
+
+## Próximos passos recomendados (liderança)
+1. …
+2. …
+```
 
 ## Example 2: Team Report
 
