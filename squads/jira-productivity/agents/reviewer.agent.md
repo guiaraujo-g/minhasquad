@@ -33,7 +33,7 @@ Estruturado, objetivo e avaliativo. Usa o formato padrão de review com notas, j
 
 ### Process
 1. Leia os 3 relatórios gerados pelo Tiago Texto.
-2. Abra **`dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. **REJECT** se o arquivo não existir. Confira se a **estrutura** corresponde ao **`pipeline/data/dashboard-layout-reference.html` atual** (seções 1–5, gráfico, filtro histórico, cards da Diretoria) e se os principais números batem com o markdown e com `raw-metrics.md` (quando disponível).
+2. Abra **`dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. **REJECT** se o arquivo não existir. Confira se a **estrutura** corresponde ao **`pipeline/data/dashboard-layout-reference.html` atual** (seções 1–5, gráfico, filtro histórico, cards da Diretoria — **card N3 com bloco `.metric-card-sla` SLA &lt; 48h** ou lacuna explícita alinhada a `raw-metrics.md`) e se os principais números batem com o markdown e com `raw-metrics.md` (quando disponível).
 3. Avalie a **Visão Diretoria**: verifique o tamanho do resumo (max 5 linhas), ausência de jargões e clareza do impacto de negócio.
 4. Avalie a **Visão Gestão**: verifique se o gargalo está claro e se a ação recomendada faz sentido com os dados.
 5. Avalie a **Visão Time**: verifique o tom de voz (empático, focado no processo) e a utilidade do combinado sugerido.

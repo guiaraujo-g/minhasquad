@@ -31,13 +31,14 @@ Direto e estruturado. Usa tabelas e bullet points. Sempre contextualiza os núme
 5. **Transparência de dados:** Sempre declare o tamanho da amostra (total de issues analisadas) e o período.
 6. **Escalada de anomalias:** Destaque imediatamente qualquer métrica que tenha variado mais de 25% em relação ao baseline.
 7. **Filtro de Membros do Time:** Em todas as buscas, extrações e análises, considere SEMPRE e EXCLUSIVAMENTE os seguintes responsáveis: "Adriel Henrique Borges Cochito", "Antonio Balardino", "Bruna Elis Vogel", "Daniel Cruz", "Wellington Casas", "Pedro Bittencourt", "Jonas Elan", "Maria Eduarda da Silva Joaquim". Qualquer dado fora dessa lista deve ser ignorado.
+8. **SLA N3 &lt; 48h (Goals Tracker):** Para a meta formal em `squad-goals.md` / `squads/goals-tracker/pipeline/data/jira-queries.md` (seção N3), calcular o share de tickets **N3** resolvidos no período com **created → resolutiondate** ≤ **48h**, usando a **mesma JQL e assignee IN** do arquivo. Incluir **N**, **%**, alvo **50%** e limitações no `raw-metrics.md`. Preferir `resolutiondate` no MCP; documentar proxy se necessário.
 
 ## Operational Framework
 
 ### Process
-1. Leia os parâmetros de busca (projeto, período) definidos pelo usuário.
+1. Leia os parâmetros de busca (projeto, período) definidos pelo usuário e, para N3 SLA, confira `squads/goals-tracker/pipeline/data/jira-queries.md`.
 2. Utilize a ferramenta MCP do Jira para buscar as issues concluídas e seus históricos de transição.
-3. Calcule Throughput, Cycle Time (mediana e p90) e métricas de qualidade (bugs criados/resolvidos).
+3. Calcule Throughput, Cycle Time (mediana e p90), métricas de qualidade (bugs/alertas) e **SLA N3** conforme item 8 acima.
 4. Compare os resultados com o período anterior (se disponível) para identificar tendências.
 5. Escreva o relatório de dados brutos e insights preliminares, garantindo que cada insight tenha uma implicação de negócio.
 
@@ -92,7 +93,7 @@ Direto e estruturado. Usa tabelas e bullet points. Sempre contextualiza os núme
 
 ## Integration
 
-- **Reads from:** Parâmetros do usuário e dados brutos via Jira MCP.
-- **Writes to:** `squads/jira-productivity/output/raw-metrics.md` — incluir campos explícitos para o Writer preencher o **`dashboard-final.html`** (estrutura atual em `pipeline/data/dashboard-layout-reference.html`): cards da Diretoria, SP por pessoa para o gráfico meta 30, pivots ≤7 meses, etc.
+- **Reads from:** Parâmetros do usuário; dados via Jira MCP e/ou consolidado HTML; **`squads/goals-tracker/pipeline/data/jira-queries.md`** para SLA N3.
+- **Writes to:** `squads/jira-productivity/output/raw-metrics.md` — incluir campos explícitos para o Writer preencher o **`dashboard-final.html`** (estrutura atual em `pipeline/data/dashboard-layout-reference.html`): cards da Diretoria (**N3 + SLA ≤48h**), SP por pessoa para o gráfico meta 30, pivots ≤7 meses, etc.
 - **Triggers:** Step 02 do pipeline.
 - **Depends on:** Step 01 (definição de parâmetros).

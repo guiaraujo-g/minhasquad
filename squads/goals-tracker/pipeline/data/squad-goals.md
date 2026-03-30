@@ -32,8 +32,8 @@ Use este arquivo como **checklist obrigatório** em todo run: cada meta abaixo d
 
 | Peso | Critério | Fonte | Como acompanhar |
 |------|----------|--------|-----------------|
-| **50%** | Tickets/integração **&lt; 1,6** (N3 ÷ fluxos integrados) | Jira | Quantidade tickets N3 vs fluxos integrados |
-| **50%** | SLA de tickets **&lt; 48h** | Jira | `project IN (N3)` (ajustar JQL conforme naming real do projeto) |
+| **50%** | Tickets/integração **&lt; 1,6** (N3 ÷ fluxos integrados) | Jira | Numerador: tickets N3 com escopo **integração** (filtro a acordar com PO); denominador: **fluxos integrados** elegíveis — ver snapshot/`jira-queries.md` (nota tickets/integração) |
+| **50%** | SLA de tickets **&lt; 48h** | Jira | `project IN (N3)` + `assignee IN (...)` exclusivo (oito colaboradores) em `pipeline/data/jira-queries.md`; tempo **created → resolutiondate** ≤ **48h** |
 
 ---
 

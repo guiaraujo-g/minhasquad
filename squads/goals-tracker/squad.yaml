@@ -13,6 +13,8 @@ skills:
 
 data:
   - pipeline/data/squad-goals.md
+  - pipeline/data/jira-queries.md
+  - pipeline/data/goals-overview.html
   - pipeline/data/research-brief.md
   - pipeline/data/domain-framework.md
   - pipeline/data/quality-criteria.md

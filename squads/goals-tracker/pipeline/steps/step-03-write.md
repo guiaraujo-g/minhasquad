@@ -21,18 +21,25 @@ Load these files before executing:
 
 ### Process
 1. **Planejar:** Do brief, extraia resumo executivo, RAG por meta, bloqueios e decisões para liderança; para o time, foco, entregas, travamentos e reconhecimentos.
-2. **Painel de progresso (obrigatório):** Antes do resumo executivo, o leitor deve enxergar **números e estados** alinhados a **`squad-goals.md`**: uma linha ou bloco por **meta agregada** (Gestão de alertas, Eficiência máxima, Suporte integrado, Produtividade), com *Alvo formal* (texto/peso do arquivo) | *Real no período* (snapshot) | *Como ler*. Separe meta de planilha vs Jira quando aplicável. Inclua também visão operacional (épicos Entrega/fila, throughput) quando o snapshot trouxer. Sem inventar % de planilha quando o snapshot marcar lacuna.
-3. **Redigir o Relatório de Liderança:** Salve em `leadership-report.md` (caminho `outputFile` deste passo). Inclua a seção **Painel de progresso** conforme item 2; depois resumo executivo, RAG, Five Whats e próximos passos. Máximo 4–6 KPIs ou metas em destaque; traduza para impacto de negócio; cada risco deve implicar uma ação de gestão.
-4. **Redigir o Relatório de Time:** Salve em `team-report.md` no **mesmo diretório versionado** do run que `leadership-report.md`. Abra com **Painel rápido** (tabela pergunta/resposta com os mesmos números do snapshot/brief). Tom colaborativo; reconhecimentos com nomes e feitos concretos quando o snapshot/brief permitir.
-5. **HTML (recomendado no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`, replicando o painel com barras empilhadas ou gráficos (ex.: Chart.js) para throughput e distribuição Entrega/fila/arquivado, de forma que o progresso seja visível sem abrir só narrativa.
-6. **Consistência:** Alinhe números, datas e keys entre os dois relatórios, o snapshot e os HTML; divergências não resolvidas → risco no texto de liderança.
-7. **Auto-verificação:** Confira `quality-criteria.md` para cada relatório.
+2. **Painel gestor (obrigatório, primeiro):** Logo após o título/cabeçalho, agrupe por **meta agregada** como em `squad-goals.md` (quatro seções numeradas). Para cada seção, use um **subtítulo** com o mesmo título do arquivo (ex.: “1. Gestão de alertas — meta agregada 100%”) e, abaixo, **lista com bullets**: cada linha = **Situação** (uma de: **Andando** | **Parado** | **Não medido** | **Abaixo da meta**) + **nome do critério** (com peso/chave Jira quando existir) + **evidência** em texto. Inclua critérios operacionais extras (ex.: throughput alertas na amostra MCP) **dentro** da seção de alertas, após os critérios formais da tabela, quando o snapshot trouxer dado. **Definições:** *Andando* = execução ou avanço com evidência; *Parado* = fila/backlog sem tração ou sem trilha; *Não medido* = busca não feita ou impossível; *Abaixo da meta* = medido e abaixo do alvo. **Alertas SLA:** nunca “Não medido” se o snapshot tiver rodado `search_jira` da `jira-queries.md`. Em seguida, bloco **Decisões da semana** com **3 itens acionáveis**.
+3. **Painel de progresso (obrigatório):** Depois do painel gestor, o leitor deve enxergar **números e estados** alinhados a **`squad-goals.md`**: uma linha ou bloco por **meta agregada** (Gestão de alertas, Eficiência máxima, Suporte integrado, Produtividade), com *Alvo formal* (texto/peso do arquivo) | *Real no período* (snapshot) | *Como ler*. Separe meta de planilha vs Jira quando aplicável. Inclua também visão operacional (épicos Entrega/fila, throughput) quando o snapshot trouxer. Sem inventar % de planilha quando o snapshot marcar lacuna.
+4. **Redigir o Relatório de Liderança:** Salve em `leadership-report.md` (caminho `outputFile` deste passo). Inclua **Painel gestor** (item 2) e **Painel de progresso** (item 3); depois resumo executivo, RAG, Five Whats e próximos passos. Máximo 4–6 KPIs ou metas em destaque; traduza para impacto de negócio; cada risco deve implicar uma ação de gestão.
+5. **Redigir o Relatório de Time:** Salve em `team-report.md` no **mesmo diretório versionado** do run que `leadership-report.md`. Abra com **Painel rápido** (tabela pergunta/resposta com os mesmos números do snapshot/brief). Tom colaborativo; reconhecimentos com nomes e feitos concretos quando o snapshot/brief permitir.
+6. **HTML (recomendado no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`. No HTML de liderança, coloque **no topo** (antes do painel de progresso detalhado) o **Painel gestor**: **um bloco por meta agregada** (`div.gestor-meta-group`), com `h3.gestor-meta-title` + `ul.gestor-meta-list` e **badges** de cor (Andando / Parado / Não medido / Abaixo da meta) em cada `li`, espelhando o markdown; depois **Decisões da semana**. Replique barras/gráficos (ex.: Chart.js) para throughput e distribuição Entrega/fila abaixo.
+7. **Consistência:** Alinhe números, datas e keys entre os dois relatórios, o snapshot e os HTML; divergências não resolvidas → risco no texto de liderança.
+8. **Auto-verificação:** Confira `quality-criteria.md` para cada relatório.
 
 ## Output Format
 
 The primary file `leadership-report.md` MUST follow this exact structure:
 ```markdown
 # Relatório de Liderança — Goals Tracker
+
+## Painel gestor — por meta agregada
+(Legenda das quatro situações. Quatro subseções `### 1.` … `### 4.` com os títulos de `squad-goals.md`; em cada uma, bullets `- **Situação** — **Critério** — evidência…`.)
+
+### Decisões da semana
+(3 itens acionáveis.)
 
 ## Painel de progresso — como enxergar as metas
 (Explicar em 1 parágrafo: meta formal vs Jira. Tabelas A/B/C: throughput com % da amostra; épicos por bucket Entrega / fila / arquivado com keys; planilha indicando indisponível se aplicável.)

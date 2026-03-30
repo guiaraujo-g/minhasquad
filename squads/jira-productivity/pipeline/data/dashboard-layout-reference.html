@@ -87,6 +87,24 @@
             letter-spacing: 0.5px;
         }
 
+        /* SLA N3 (Goals Tracker — meta 50% Suporte): bloco dentro do card N3 */
+        .metric-card-sla {
+            font-size: 0.88rem;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #DFE1E6;
+            color: var(--text-muted);
+            line-height: 1.45;
+            text-align: center;
+        }
+        .metric-card-sla .metric-sla-pct {
+            font-size: 1.35em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            display: block;
+            margin: 6px 0 2px;
+        }
+
         .trend-up { color: var(--success); font-size: 0.8em; }
         .trend-down { color: var(--danger); font-size: 0.8em; }
         .trend-warn { color: var(--warning); font-size: 0.8em; }
@@ -283,6 +301,12 @@
                 <div class="metric-label">Tickets N3 resolvidos (time)</div>
                 <div class="metric-value">11</div>
                 <div class="metric-label">Somente tickets N3 resolvidos pelos membros do time de integrações (escopo squad)</div>
+                <div class="metric-card-sla" title="Definição: squads/goals-tracker/pipeline/data/jira-queries.md (N3)">
+                    <span class="metric-label" style="text-transform:none;letter-spacing:0;">SLA N3 &lt; 48h · Goals Tracker</span>
+                    <span class="metric-sla-pct">62%</span>
+                    <span>≤48h (created→resolutiondate) · alvo <strong>50%</strong> · <em>N=11</em></span>
+                    <span class="trend-up" style="display:block;margin-top:6px;">Dentro da meta</span>
+                </div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">Alertas criados</div>
@@ -341,7 +365,7 @@
         </table>
     
         <h3>Tickets N3 resolvidos pelo time (Período)</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin: -6px 0 10px;">Apenas assignees do time de integrações; não inclui todo o volume N3 da empresa.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin: -6px 0 10px;">Apenas assignees do time de integrações; não inclui todo o volume N3 da empresa. O <strong>SLA &lt; 48h</strong> do card da Diretoria usa a mesma base + Δ created→resolutiondate (ver <code>squads/goals-tracker/pipeline/data/jira-queries.md</code>).</p>
         <div class="table-scroll">
             <table>
         <thead>

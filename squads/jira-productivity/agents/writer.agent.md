@@ -37,7 +37,7 @@ Adaptável ao público. Para a diretoria: conciso, focado em impacto e sem jarg�
 3. Escreva a **Visão Gestão**: Detalhe o fluxo, identifique o gargalo principal e sugira uma ação de melhoria de processo (ex: ajustar WIP limits).
 4. Escreva a **Visão Time**: Comece celebrando uma vitória ("O que foi bem"). Aponte a dor principal baseada em dados ("Onde doeu") e sugira um combinado prático para a próxima sprint.
 5. Revise os três textos para garantir que o tom de voz está correto para cada público.
-6. **Gere sempre `dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. Para **cada** novo relatório, reler o **`dashboard-layout-reference.html` atual** no repo e replicar essa estrutura de reporte (seções, scripts, IDs); preencher apenas com dados do run (`raw-metrics.md`). Não clonar estrutura de HTMLs antigos em `output/`.
+6. **Gere sempre `dashboard-final.html`** no mesmo diretório versionado que `final-reports.md`. Para **cada** novo relatório, reler o **`dashboard-layout-reference.html` atual** no repo e replicar essa estrutura de reporte (seções, scripts, IDs); preencher apenas com dados do run (`raw-metrics.md`). No **card N3** da Diretoria, incluir o bloco **SLA N3 &lt; 48h** (`.metric-card-sla`) com números do analista ou texto de lacuna. Não clonar estrutura de HTMLs antigos em `output/`.
 
 ### Decision Criteria
 - Quando traduzir um jargão: Sempre que escrever para a Diretoria. (Ex: "Cycle Time p90" vira "Previsibilidade de Entrega").

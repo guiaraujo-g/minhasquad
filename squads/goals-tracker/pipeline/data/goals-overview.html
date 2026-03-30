@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goals Tracker — Visão de todas as metas</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --card: #fff;
+      --border: #d8dee4;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --accent-soft: #ddf4ff;
+      --ok: #1a7f37;
+      --warn: #9a6700;
+      --area-1: #8250df;
+      --area-2: #0969da;
+      --area-3: #bc4c00;
+      --area-4: #1a7f37;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      margin: 0;
+      padding: 0 16px 48px;
+      max-width: 980px;
+      margin-inline: auto;
+    }
+    header {
+      padding: 28px 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.5rem; margin: 0 0 8px; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .banner {
+      background: var(--accent-soft);
+      border: 1px solid #b6e3ff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+    .banner a { color: var(--accent); font-weight: 600; }
+    nav.toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    nav.toc a {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px 22px;
+      margin-bottom: 20px;
+      scroll-margin-top: 12px;
+    }
+    section h2 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #fff;
+    }
+    .b1 { background: var(--area-1); }
+    .b2 { background: var(--area-2); }
+    .b3 { background: var(--area-3); }
+    .b4 { background: var(--area-4); }
+    .section-lead { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
+    table.meta {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    table.meta th, table.meta td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.meta th { background: #f6f8fa; font-weight: 600; }
+    table.meta td:first-child { white-space: nowrap; font-weight: 600; color: var(--muted); width: 5.5rem; }
+    table.meta a { color: var(--accent); word-break: break-word; }
+    .checklist {
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .checklist li {
+      padding: 6px 0 6px 28px;
+      position: relative;
+      border-top: 1px dashed var(--border);
+    }
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 4px;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Goals Tracker — visão de todas as metas</h1>
+    <p>Semestre <strong>janeiro–julho/2026</strong> · America/Sao_Paulo · fonte canônica: <code>squad-goals.md</code></p>
+  </header>
+
+  <div class="banner">
+    <strong>Acompanhamento:</strong> use esta página como mapa. Para números e RAG do período, abra o último run em
+    <a href="../../output/">squads/goals-tracker/output/</a> (pasta com data mais recente → <code>v1/leadership-report.md</code> ou <code>.html</code>).
+    A planilha de saúde e alguns KPIs exigem conexão manual ou export — veja coluna “Onde acompanhar”.
+  </div>
+
+  <nav class="toc" aria-label="Ir para área">
+    <a href="#gestao-alertas">1 · Gestão de alertas</a>
+    <a href="#eficiencia">2 · Eficiência máxima</a>
+    <a href="#suporte">3 · Suporte integrado</a>
+    <a href="#produtividade">4 · Produtividade</a>
+  </nav>
+
+  <section id="gestao-alertas">
+    <h2><span class="badge b1">Área 1</span> Gestão de alertas</h2>
+    <p class="section-lead">Meta agregada do semestre: <strong>100%</strong> (50% + 50% abaixo).</p>
+    <table class="meta">
+      <thead>
+        <tr>
+          <th>Peso</th>
+          <th>Critério</th>
+          <th>Fonte / link</th>
+          <th>Onde acompanhar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>50%</td>
+          <td>Tempo de resolução de alertas <strong>Urgente/Alta</strong> (N8N) <strong>&lt; 2 dias</strong></td>
+          <td>Jira · projeto <strong>Alertas Integração</strong></td>
+          <td><strong>Sempre Jira:</strong> JQL padrão + cálculo em <code>pipeline/data/jira-queries.md</code> (MCP <code>search_jira</code> a cada run). Preferir <code>resolutiondate</code>; se indisponível no MCP, proxy <code>created</code>→<code>updated</code> documentado no relatório.</td>
+        </tr>
+        <tr>
+          <td>50%</td>
+          <td>Saúde das integrações = <strong>100%</strong></td>
+          <td>
+            <a href="https://docs.google.com/spreadsheets/d/1lggk00rk1NYB53xPTOcI3twUEcXWn2eu4pOhQck3rQ0/edit?usp=sharing" target="_blank" rel="noopener">Planilha Google (saúde)</a>
+            · ID <code>1lggk00rk1NYB53xPTOcI3twUEcXWn2eu4pOhQck3rQ0</code>
+          </td>
+          <td>Abas/ranges no <code>run-scope</code> quando possível; skill Google Sheets no pipeline</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul class="checklist">
+      <li>SLA 2 dias: rodar busca da <code>jira-queries.md</code>; paginar se &gt;100 issues; comparar % ≤48h com alvo 50%</li>
+      <li>Saúde 100%: validar linha por integração na planilha</li>
+    </ul>
+  </section>
+
+  <section id="eficiencia">
+    <h2><span class="badge b2">Área 2</span> Eficiência máxima</h2>
+    <p class="section-lead">Objetivo: <strong>zero pendências</strong> em integrações essenciais para clientes (soma dos pesos = 100%).</p>
+    <table class="meta">
+      <thead>
+        <tr>
+          <th>Peso</th>
+          <th>Critério</th>
+          <th>Fonte / link</th>
+          <th>Onde acompanhar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>20%</td>
+          <td>Plataforma para providers: RM Totvs, ADP API, ADP XML, Sênior, Metadados, LG Nuvem</td>
+          <td><a href="https://gupy-io.atlassian.net/browse/INTS-645" target="_blank" rel="noopener">INTS-645</a></td>
+          <td>Status do épico + filhos; relatório mensal</td>
+        </tr>
+        <tr>
+          <td>20%</td>
+          <td><strong>Edição de integração</strong> via plataforma</td>
+          <td>Épico <strong>a definir</strong> (preencher em <code>squad-goals.md</code>)</td>
+          <td>Quando houver chave Jira, mesma cadência dos outros épicos</td>
+        </tr>
+        <tr>
+          <td>40%</td>
+          <td>Exame médico <strong>(SOC)</strong> <em>ou</em> <strong>criação de vagas</strong> via plataforma</td>
+          <td>
+            <a href="https://gupy-io.atlassian.net/browse/INTS-659" target="_blank" rel="noopener">INTS-659</a> (SOC) ·
+            <a href="https://gupy-io.atlassian.net/browse/INTS-643" target="_blank" rel="noopener">INTS-643</a> (criação de vagas)
+          </td>
+          <td>Dois épicos cobrindo o mesmo peso — acompanhar ambos na priorização</td>
+        </tr>
+        <tr>
+          <td>20%</td>
+          <td><strong>Workflows customizados</strong></td>
+          <td><a href="https://gupy-io.atlassian.net/browse/INTS-662" target="_blank" rel="noopener">INTS-662</a></td>
+          <td>Status + issues filhas</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul class="checklist">
+      <li>Cadastrar épico de edição de integração e atualizar <code>squad-goals.md</code></li>
+      <li>Revisar Parking Lot / Backlog vs Entrega por épico</li>
+    </ul>
+  </section>
+
+  <section id="suporte">
+    <h2><span class="badge b3">Área 3</span> Suporte ao cliente integrado</h2>
+    <p class="section-lead">Meta agregada: <strong>100%</strong> (50% + 50%).</p>
+    <table class="meta">
+      <thead>
+        <tr>
+          <th>Peso</th>
+          <th>Critério</th>
+          <th>Fonte / link</th>
+          <th>Onde acompanhar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>50%</td>
+          <td>Tickets por integração <strong>&lt; 1,6</strong> (N3 ÷ fluxos integrados)</td>
+          <td>Jira · numerador N3 com escopo <strong>integração</strong> (filtro com PO) ÷ denominador <strong>fluxos integrados</strong></td>
+          <td>Definir denominador e JQL de integração; <strong>não</strong> confundir com o filtro assignee do SLA N3</td>
+        </tr>
+        <tr>
+          <td>50%</td>
+          <td>SLA de tickets <strong>&lt; 48h</strong></td>
+          <td>Jira · <code>project IN (N3)</code> + <code>assignee IN (…)</code> exclusivo em <code>jira-queries.md</code></td>
+          <td><strong>created</strong> → <strong>resolutiondate</strong> ≤ 48h; export com ambos os campos; consolidado no relatório</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul class="checklist">
+      <li><strong>SLA N3 &lt; 48h:</strong> <code>project IN (N3)</code> + <code>assignee IN (…)</code> exclusivo em <code>jira-queries.md</code>; tempo <strong>created → resolutiondate</strong> ≤ 48h</li>
+      <li><strong>Tickets/integração &lt; 1,6:</strong> razão própria — escopo integração + denominador fluxos integrados (sem usar a lista assignee do SLA como definição da meta)</li>
+      <li>Alinhar label/epic/componente para “demanda integração” no numerador da razão</li>
+      <li>Não comparar volume bruto de NE-* com a meta sem os filtros acordados</li>
+    </ul>
+  </section>
+
+  <section id="produtividade">
+    <h2><span class="badge b4">Área 4</span> Produtividade do time de desenvolvimento</h2>
+    <p class="section-lead">Indicadores por sprint e por pessoa onde aplicável.</p>
+    <table class="meta">
+      <thead>
+        <tr>
+          <th>Meta</th>
+          <th>Critério</th>
+          <th>Fonte / link</th>
+          <th>Onde acompanhar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>90%</td>
+          <td>Cobertura <strong>workflows autogerados</strong> (90% das tarefas tipo “Novo desenvolvimento” pontuadas em 1)</td>
+          <td>Jira · referência <a href="https://gupy-io.atlassian.net/browse/INTS-587" target="_blank" rel="noopener">INTS-587</a></td>
+          <td>Definir baseline e amostra/board; piloto concluído ≠ 90% global</td>
+        </tr>
+        <tr>
+          <td>30 pts</td>
+          <td><strong>30 pontos por sprint</strong> por colaborador (produtividade dev)</td>
+          <td>Jira · por sprint</td>
+          <td>Velocity ou export por sprint e por assignee</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul class="checklist">
+      <li>Listar colaboradores em <code>squad-goals.md</code> para reconhecimentos e filtros</li>
+      <li>Conferir pontos por sprint no board oficial do time</li>
+    </ul>
+  </section>
+
+  <footer>
+    Documento gerado a partir de <code>squads/goals-tracker/pipeline/data/squad-goals.md</code>.
+    Abra este arquivo no navegador (duplo clique ou “Open with Live Server”) para navegação por âncoras.
+  </footer>
+</body>
+</html>
