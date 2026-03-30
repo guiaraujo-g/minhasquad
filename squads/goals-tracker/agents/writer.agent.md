@@ -34,7 +34,7 @@ Liderança: BLUF (conclusão primeiro), bullets curtos, números com significado
 
 ### Process
 1. **Ler entradas:** Absorva `analysis-brief.md` por completo; consulte `research-snapshot.md` apenas para fatos de apoio (keys, números, datas) sem reinterpretar RAG.
-2. **Redigir o Relatório de Liderança:** Siga `pipeline/steps/step-03-write.md` — formato canônico igual ao run `output/2026-03-26-112700/v1/`: **Resumo executivo** (1 frase + 2–4 bullets); **Status das metas (RAG)** (quatro áreas de `squad-goals.md`); **Five Whats**; **Próximos passos**. Sem painel gestor, painel A–E nem tabelas operacionais longas no `.md`. Gere `leadership-report.html` com **um** gráfico `progressChart` (Chart.js), como nesse run.
+2. **Redigir o Relatório de Liderança:** Siga `pipeline/steps/step-03-write.md` — formato canônico `2026-03-26-112700/v1/`: **Resumo** → **RAG** → **Andamento por frente** (tabela) → **Impedimentos (Five Whats e 5W2H)** — tabela **# | O quê | Por quê | Onde | Quando | Quem | Como | Quanto** (conteúdo dos bloqueios do brief) → **Próximos passos**. Sem painel gestor nem A–E. HTML: `progressChart` + `frentes-table` + `w2h-wrap` / `w2h-table`.
 3. **Redigir o Relatório de Time:** Inclua: **Foco da Semana**, **O que entregamos**, **Onde estamos travados** (com linguagem colaborativa), **Decisões tomadas e por quê**, **Reconhecimentos** (nomes específicos alinhados ao squad), **Como se envolver** (feedback, rituais, issues).
 4. **Harmonizar sem empilhar:** Elimine duplicação entre os dois relatórios — liderança não precisa de lista de elogios longa; o time não precisa de detalhe político de decisão.
 5. **Revisão de tom:** Passe o olho em jargão corporativo no time e em excesso técnico na liderança; ajuste vocabulário.
@@ -122,7 +122,7 @@ Comentários na issue de arquitetura ou no sync técnico de quinta-feira.
 - [ ] Relatório de time evita jargão vazio e siglas opacas.
 - [ ] Reconhecimentos citam pessoas e contribuições específicas.
 - [ ] Métricas refletem dados de Jira/Sheets via brief; sem números novos não documentados.
-- [ ] `leadership-report.md` + `leadership-report.html` no padrão canônico (`2026-03-26-112700`); `team-report.md` + `team-report.html` no mesmo run.
+- [ ] `leadership-report.md` + `leadership-report.html` no padrão canônico (`2026-03-26-112700`), com **frentes** + **5W2H** (`w2h-table`); `team-report.md` + `team-report.html` no mesmo run.
 
 ## Integration
 

@@ -34,9 +34,9 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 
 ### Process
 1. **Carregar contexto:** Leia `squads/goals-tracker/pipeline/data/quality-criteria.md`, `anti-patterns.md`, `pipeline/steps/step-03-write.md` (layout canônico), e os artefatos `leadership-report.md`, `leadership-report.html`, `team-report.md`, `analysis-brief.md`, `research-snapshot.md`.
-2. **Auditoria de liderança:** Verifique executive summary, densidade de métricas (4–6 metas no topo), ligação de risco a ação, Five Whats completos onde bloqueios são destacados, e ausência de vaidade técnica.
+2. **Auditoria de liderança:** Verifique resumo, RAG, **tabela frentes**, **tabela 5W2H** nos impedimentos (coerente com Five Whats do brief), próximos passos; risco → ação; sem vaidade técnica.
 3. **Auditoria de time:** Verifique alinhamento às metas do semestre, transparência sobre bloqueios, reconhecimentos específicos, ausência de buzzwords e de siglas não decodificadas, e seção de envolvimento com próximo passo claro.
-4. **Layout fixo (liderança):** Rejeitar se o markdown de liderança não for só as quatro seções na ordem do run `2026-03-26-112700`, ou se o HTML tiver mais de um gráfico Chart.js / painel gestor / seções A–E.
+4. **Layout fixo (liderança):** Rejeitar se faltar tabela **frentes** ou **5W2H** (8 colunas), se a ordem de seções não for a de `step-03-write.md`, ou se o HTML não tiver `frentes-table` + `w2h-table` / tiver mais de um gráfico Chart.js / painel gestor / A–E.
 5. **Checagem cruzada:** Compare números, RAG e keys citadas entre relatórios e brief/snapshot; marque divergências.
 6. **Registrar notas:** Escreva `review-notes.md` com status (aprovado / aprovado com ressalvas / devolvido), lista de issues por severidade, e mudanças sugeridas ou aplicadas.
 7. **Se devolver:** Liste exatamente o que o escritor deve corrigir; não reabra discussão de dados — só comunicação e aderência.
@@ -112,7 +112,7 @@ Feedback em bullets, priorizado por severidade (bloqueador, importante, opcional
 ## Quality Criteria
 
 - [ ] Cada item de `quality-criteria.md` foi verificado para ambos os relatórios (ou marcado N/A com motivo).
-- [ ] Padrão canônico de liderança (`2026-03-26-112700` / `step-03-write.md`) verificado em `.md` e `.html`.
+- [ ] Padrão canônico de liderança (`2026-03-26-112700` / `step-03-write.md`) verificado em `.md` e `.html` — frentes + **5W2H**.
 - [ ] Números, RAG e keys conferem com `analysis-brief.md` / `research-snapshot.md`.
 - [ ] Impedimentos de liderança passam no teste de decisão e Five Whats quando aplicável.
 - [ ] Tom de time sem buzzwords; tom de liderança sem excesso técnico inútil.

@@ -20,6 +20,29 @@ export function todayIsoInTimezone(tz: string): string {
   return `${y}-${m}-${d}`;
 }
 
+/**
+ * Converte instante ISO da API Agile (UTC) para YYYY-MM-DD no **calendário local** do fuso
+ * (alinhado ao board / REPORT_DEFAULT_TIMEZONE). Evita usar só `slice(0,10)` em UTC.
+ */
+export function agileInstantToLocalIsoDate(iso: string, tz: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) {
+    return iso.length >= 10 ? iso.slice(0, 10) : iso;
+  }
+  const fmt = new Intl.DateTimeFormat("en-CA", {
+    timeZone: tz,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = fmt.formatToParts(d);
+  const y = parts.find((p) => p.type === "year")?.value;
+  const m = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+  if (!y || !m || !day) throw new Error("Invalid date format");
+  return `${y}-${m}-${day}`;
+}
+
 /** Primeiro dia do mês corrente no mesmo fuso que `todayIsoInTimezone`. */
 export function firstDayOfMonthIso(todayIso: string): string {
   const [y, m] = todayIso.split("-").map(Number);

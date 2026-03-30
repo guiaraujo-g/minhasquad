@@ -4,7 +4,7 @@
 > **Semestre de acompanhamento:** janeiro/2026 a julho/2026 (America/Sao_Paulo).  
 > **Relatórios:** liderança (impedimentos, big numbers) + time (transparência, engajamento).
 
-Use este arquivo como **checklist obrigatório** em todo run: cada meta abaixo deve aparecer no `research-snapshot` (linha ou lacuna explícita), no `analysis-brief` (RAG por tema) e nos relatórios de liderança/time — salvo impossibilidade técnica documentada em **Data gaps**.
+Use este arquivo como **checklist obrigatório** em todo run: cada meta abaixo deve aparecer no `research-snapshot` (linha ou lacuna explícita), no `analysis-brief` (RAG por tema) e nos relatórios de liderança/time — salvo impossibilidade técnica documentada em **Data gaps**. No **relatório de liderança**, a seção **Andamento por frente (explícito)** deve ter **uma linha de tabela por frente rastreável** aqui; a seção **Impedimentos (Five Whats e 5W2H)** deve expor cada bloqueio material em **tabela 5W2H** (oito colunas), derivada do brief.
 
 ---
 

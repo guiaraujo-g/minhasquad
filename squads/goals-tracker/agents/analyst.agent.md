@@ -39,7 +39,7 @@ Direta, com seções curtas e tabelas. Sempre separa **dado** (do snapshot) de *
 3. **Mapear bloqueios:** Liste impedimentos do Jira (flags, dependências, aguardando decisão) e cruzados com a planilha; descarte ruído de baixo impacto usando critérios de materialidade (atraso ao cliente, meta semestral, SLA).
 4. **Aplicar Five Whats:** Para cada bloqueio material, preencha: Goal (qual meta), Blocker (o que trava), Impact (negócio), Tried (tentativas), Ideal Fix (estado desejado); sugira owner e próxima ação.
 5. **Escalar ou não:** Marque se o item precisa de decisão de liderança ou pode ficar no time; justifique em uma linha.
-6. **Redigir o brief:** Produza `analysis-brief.md` com: resumo executivo analítico, tabela RAG, lista de bloqueios com Five Whats, tendências/riscos, e lista de perguntas para o escritor (lacunas). O escritor **sempre** condensa a liderança no formato curto `2026-03-26-112700` (`step-03-write.md`) — o brief deve fornecer fatos para as quatro áreas de `squad-goals.md`, não exigir painéis extras no relatório final.
+6. **Redigir o brief:** Produza `analysis-brief.md` com: resumo executivo analítico, tabela RAG, lista de bloqueios com **Five Whats** (para o escritor mapear em **5W2H**: O quê, Por quê, Onde, Quando, Quem, Como, Quanto), tendências/riscos, e perguntas ao escritor (lacunas). O escritor monta **tabela de frentes** + **tabela 5W2H** no relatório de liderança — o brief/snapshot devem trazer **status ou lacuna por frente** e **dados por bloqueio** para preencher as células sem inventar.
 
 ### Decision Criteria
 - **Amarelo vs Vermelho:** Use vermelho quando a meta estiver fora de curso com alta confiança ou bloqueio sem mitigação visível; amarelo quando houver risco ou dados incompletos mas ainda há caminhos.

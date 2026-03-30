@@ -1,7 +1,7 @@
-import type { ReportDTO } from "@/lib/report/types";
+import type { HistoricoSectionData } from "@/lib/report/types";
 import { HistoricoPivotTables } from "../HistoricoPivotTables";
 
-type Props = { data: ReportDTO };
+type Props = { data: HistoricoSectionData };
 
 export function HistoricoSection({ data }: Props) {
   return (

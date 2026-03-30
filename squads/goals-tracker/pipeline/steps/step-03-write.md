@@ -22,16 +22,19 @@ Load these files before executing:
 ## Instructions
 
 ### Process
-1. **Planejar:** Do brief e `research-snapshot.md`, extraia resumo executivo (1 frase + 2–4 bullets), RAG pelas quatro áreas de `squad-goals.md`, bloqueios no formato Five Whats e próximos passos para liderança; para o time, foco, entregas, travamentos e reconhecimentos.
-2. **Relatório de Liderança (formato canônico — espelho do run `2026-03-26-112700`):** Salve em `leadership-report.md` (caminho `outputFile`). **Ordem fixa:** apenas `#` título, `## Resumo executivo (1 frase + 2–4 bullets)`, `## Status das metas (RAG)`, `## Impedimentos e decisões (Five Whats)`, `## Próximos passos recomendados (liderança)`. Narrativa executiva; números alinhados ao snapshot. **Proibido** neste arquivo: “Painel gestor”, “Painel de progresso”, seções A–E, tabelas operacionais longas, segundo RAG em tabela, badges Andando/Parado, bloco “Decisões da semana” separado do Five Whats.
+1. **Planejar:** Do brief e `research-snapshot.md`, extraia resumo executivo (1 frase + 2–4 bullets), RAG pelas quatro áreas de `squad-goals.md`, bloqueios (Five Whats) para mapear em **5W2H**, e próximos passos para liderança; para o time, foco, entregas, travamentos e reconhecimentos.
+2. **Relatório de Liderança (formato canônico — espelho do run `2026-03-26-112700` + frentes + 5W2H):** Salve em `leadership-report.md` (caminho `outputFile`). **Ordem fixa:** `#` título → `## Resumo executivo (1 frase + 2–4 bullets)` → `## Status das metas (RAG)` → **`## Andamento por frente (explícito)`** → **`## Impedimentos e decisões (Five Whats e 5W2H)`** → `## Próximos passos recomendados (liderança)`.
+   - **Andamento por frente (obrigatório):** Tabela Markdown com **uma linha por frente** alinhada a `squad-goals.md`: incluir, no mínimo, as linhas do run de referência (SLA alertas U/A, saúde planilha, INTS-645, edição integração, INTS-659, INTS-643, INTS-662, tickets/integração N3, SLA N3 &lt;48h, INTS-587, 30 pts/sprint). Colunas: **Frente** | **Peso / meta** | **Rastreio** (chave Jira, planilha ou “não medido”) | **Andamento no período** (1 frase factual do snapshot). Se uma frente não tiver dado, declarar lacuna na célula — não omitir a linha.
+   - **Impedimentos 5W2H (obrigatório):** Uma tabela Markdown com colunas **# | O quê | Por quê | Onde | Quando | Quem | Como | Quanto**. Cada linha = um bloqueio material do brief, cobrindo o conteúdo dos **Five Whats** (meta/bloqueio/impacto/tentativas/ideal) distribuído nas colunas. Mínimo: tantas linhas quanto bloqueios escalonados no `analysis-brief.md` (referência: 3 linhas no run `2026-03-26-112700`). **Não** substituir por lista numerada longa só em prosa — a tabela é a visão principal.
+   - Narrativa executiva; números alinhados ao snapshot. **Proibido:** “Painel gestor”, “Painel de progresso”, seções **A–E**, segundo RAG em tabela separada da agregada, badges Andando/Parado, bloco “Decisões da semana” fora desta seção, doughnuts ou múltiplos gráficos no HTML além de `progressChart`.
 3. **Redigir o Relatório de Time:** Salve em `team-report.md` no **mesmo diretório versionado** do run que `leadership-report.md`. Abra com **Painel rápido** (tabela pergunta/resposta com os mesmos números do snapshot/brief). Tom colaborativo; reconhecimentos com nomes e feitos concretos quando o snapshot/brief permitir.
-4. **HTML (obrigatório no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`. O **`leadership-report.html`** deve seguir **o mesmo layout** que `squads/goals-tracker/output/2026-03-26-112700/v1/leadership-report.html`: `<h1>`, `## Resumo executivo` em `.highlight`, **um único** gráfico Chart.js `progressChart` (barras **Atual** vs **Meta**, sete rótulos: Tempo Alertas, Saúde Integrações, Eficiência Máxima, Tickets/Integração, SLA Tickets &lt; 48h, Cobertura Workflows, Produtividade), depois RAG em lista com classes `rag-green` / `rag-amber` / `rag-red`, Five Whats, próximos passos. **Sem** painel gestor, doughnuts extras, gráficos de governança nem seções A–E. Preencha `datasets` com valores do snapshot (como no run de referência).
+4. **HTML (obrigatório no mesmo run):** Gere `leadership-report.html` e `team-report.html` ao lado dos `.md`. O **`leadership-report.html`** deve seguir `2026-03-26-112700/v1/leadership-report.html`: `<h1>`, resumo em `.highlight`, **um único** `progressChart`, RAG em lista (`rag-green` / `rag-amber` / `rag-red`), **`table.frentes-table`**, **`h2` Impedimentos (Five Whats e 5W2H) + `div.w2h-wrap` + `table.w2h-table`** (8 colunas), próximos passos. **Sem** painel gestor, doughnuts extras nem A–E. `datasets` do gráfico = snapshot.
 5. **Consistência:** Alinhe números, datas e keys entre os dois relatórios, o snapshot e os HTML; divergências não resolvidas → risco no texto de liderança.
 6. **Auto-verificação:** Confira `quality-criteria.md` para cada relatório.
 
 ## Output Format
 
-The primary file `leadership-report.md` MUST follow this exact structure (same as run `2026-03-26-112700`):
+The primary file `leadership-report.md` MUST follow this exact structure (same as run `2026-03-26-112700`, incluindo frentes):
 ```markdown
 # Relatório de Liderança — Goals Tracker
 
@@ -46,9 +49,19 @@ The primary file `leadership-report.md` MUST follow this exact structure (same a
 - **Suporte integrado:** ...
 - **Produtividade:** ...
 
-## Impedimentos e decisões (Five Whats)
-1. **Título curto** — Bloqueado por …; impacto …; ideal: …
-2. ...
+## Andamento por frente (explícito)
+(Uma linha introdutória opcional.)
+
+| Frente | Peso / meta | Rastreio | Andamento no período |
+|--------|-------------|----------|----------------------|
+| ... | ... | ... | ... |
+
+## Impedimentos e decisões (Five Whats e 5W2H)
+(Parágrafo curto: tabela = Five Whats em colunas 5W2H.)
+
+| # | O quê | Por quê | Onde | Quando | Quem | Como | Quanto |
+|---|-------|---------|------|--------|------|------|--------|
+| 1 | … | … | … | … | … | … | … |
 
 ## Próximos passos recomendados (liderança)
 1. ...
@@ -95,8 +108,16 @@ The secondary file `team-report.md` MUST follow this exact structure:
 - **Gestão de alertas:** 🟢 Coerente com a meta semestral.
 - **Eficiência máxima:** 🟡 Edição depende de arquitetura — decisão até sexta-feira.
 
-## Impedimentos e decisões (Five Whats)
-1. **Edição de integração** — Bloqueado por definição arquitetural (INTS-645); impacto em PLAT-100; tentativas: workshops e proposta provisória; ideal: decisão documentada com opção escolhida e owner.
+## Andamento por frente (explícito)
+| Frente | Peso / meta | Rastreio | Andamento no período |
+|--------|-------------|----------|----------------------|
+| SLA alertas U/A | 50% | Jira | … |
+| INTS-645 | 20% | INTS-645 | … |
+
+## Impedimentos e decisões (Five Whats e 5W2H)
+| # | O quê | Por quê | Onde | Quando | Quem | Como | Quanto |
+|---|-------|---------|------|--------|------|------|--------|
+| 1 | Edição na plataforma parada | Arquitetura não decidida | INTS-645 | Até sexta | Arquitetura + EM | Workshop + decisão no épico | 1 sprint de risco |
 
 ## Próximos passos recomendados (liderança)
 1. Confirmar com arquitetura data e critério de aceite do módulo de edição.
@@ -127,7 +148,7 @@ Comentários na INTS-645 ou sync de quinta-feira.
 Reject and redo if ANY of these are true:
 1. Os dois arquivos não foram salvos (`leadership-report.md` e `team-report.md`) no mesmo run, ou um deles está ausente.
 2. O Relatório de Liderança usa métricas de vaidade sem ligação a resultado (ex.: story points isolados) ou omite decisões claras onde há bloqueio âmbar ou vermelho.
-3. `leadership-report.md` ou `leadership-report.html` inclui **Painel gestor**, **Painel de progresso**, seções **A–E**, múltiplos gráficos Chart.js além de `progressChart`, ou estrutura diferente do run de referência `2026-03-26-112700`.
+3. `leadership-report.md` ou `leadership-report.html` inclui **Painel gestor**, **Painel de progresso**, seções **A–E**, múltiplos gráficos Chart.js além de `progressChart`, **falta** `## Andamento por frente (explícito)` com tabela alinhada a `squad-goals.md`, **falta** `## Impedimentos e decisões (Five Whats e 5W2H)` com **tabela 5W2H** (8 colunas) em vez de lista numerada como única forma, ou estrutura diferente do run de referência `2026-03-26-112700`.
 
 ## Quality Criteria
 

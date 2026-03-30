@@ -7,6 +7,15 @@ export const PROJECT_KEYS = {
   ioam: process.env.JIRA_PROJECT_IOAM ?? "IOAM",
 } as const;
 
+/** Ordem em que o atalho “sprint atual” consulta boards (default: INTS → IOAM). */
+export function activeSprintProjectQueryOrder(): readonly string[] {
+  const v = process.env.JIRA_ACTIVE_SPRINT_PROJECT?.trim().toUpperCase();
+  const { ints, ioam } = PROJECT_KEYS;
+  if (!v) return [ints, ioam];
+  if (v === ioam.toUpperCase() || v === "IOAM") return [ioam, ints];
+  return [ints, ioam];
+}
+
 export const TEAM_DISPLAY_NAMES: readonly string[] = [
   "Adriel Henrique Borges Cochito",
   "Antonio Balardino",
@@ -58,8 +67,47 @@ export function n3TeamScopeActive(): boolean {
   return assignee !== null;
 }
 
+const DEFAULT_STORY_POINTS_FIELD = "customfield_10016";
+
+/** IDs de custom field para Story Points (vírgula = fallback em ordem). */
+export function storyPointsFieldIds(): string[] {
+  const raw = process.env.JIRA_STORY_POINTS_FIELD?.trim();
+  if (!raw) return [DEFAULT_STORY_POINTS_FIELD];
+  const parts = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const p of parts) {
+    if (!seen.has(p)) {
+      seen.add(p);
+      out.push(p);
+    }
+  }
+  return out.length > 0 ? out : [DEFAULT_STORY_POINTS_FIELD];
+}
+
+/** Primeiro ID (compatível com código legado e uma única coluna na API). */
 export function storyPointsFieldId(): string {
-  return process.env.JIRA_STORY_POINTS_FIELD?.trim() || "customfield_10016";
+  return storyPointsFieldIds()[0] ?? DEFAULT_STORY_POINTS_FIELD;
+}
+
+/** Une campos base com todos os IDs de SP para `search/jql`. */
+export function jiraSearchFieldsWithStoryPoints(base: readonly string[]): string[] {
+  return [...new Set([...base, ...storyPointsFieldIds()])];
+}
+
+/**
+ * Campos para issues INTS+IOAM onde lemos Story Points.
+ * `navigable` usa `*navigable` na API (útil quando `customfield_*` explícitos não aparecem no JSON).
+ */
+export function intIoamIssueSearchFields(): string[] {
+  const v = process.env.JIRA_INTIOAM_SP_FIELDS?.trim().toLowerCase();
+  if (v === "navigable" || v === "*navigable") {
+    return ["*navigable"];
+  }
+  return jiraSearchFieldsWithStoryPoints(["assignee", "resolutiondate"]);
 }
 
 /** AccountIds quando `JIRA_TEAM_FILTER_MODE=accountId`. */

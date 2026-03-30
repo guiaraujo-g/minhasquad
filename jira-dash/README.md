@@ -23,8 +23,10 @@ Preencha:
 | `JIRA_BASE_URL` | URL base com `https://` (ex.: `https://empresa.atlassian.net`). Só o host também funciona (`empresa.atlassian.net` → `https://` é assumido) |
 | `JIRA_EMAIL` | E-mail da conta Atlassian |
 | `JIRA_API_TOKEN` | Token de API |
-| `REPORT_DEFAULT_TIMEZONE` | Opcional; default do período quando `from`/`to` ausentes |
-| `JIRA_STORY_POINTS_FIELD` | ID do custom field de pontos (ex.: `customfield_10016`) |
+| `REPORT_DEFAULT_TIMEZONE` | Opcional; default do período quando `from`/`to` ausentes; também usado para **datas da sprint ativa** no atalho `?sprint=current` |
+| `JIRA_ACTIVE_SPRINT_PROJECT` | Opcional: `IOAM` ou `INTS` — qual projeto consultar **primeiro** na API Agile para a sprint ativa (padrão: INTS, depois IOAM) |
+| `JIRA_STORY_POINTS_FIELD` | Um ou mais IDs separados por vírgula (ordem de fallback), ex.: `customfield_10016` ou `customfield_10016,customfield_10037` |
+| `JIRA_INTIOAM_SP_FIELDS` | Opcional: `navigable` para usar `*navigable` no `search/jql` em INTS+IOAM (quando SP não vem nos `customfield_*` explícitos) |
 | `JIRA_TEAM_FILTER_MODE` | `displayName` (padrão, alinha ao squad) ou `accountId` |
 | `JIRA_TEAM_ACCOUNT_IDS` | Obrigatório em modo `accountId`: IDs de conta separados por vírgula |
 | `JIRA_JQL_RESOLVED_FIELD` | Opcional: `resolutiondate` se a instância não aceitar `resolved` nos filtros de intervalo |
@@ -39,6 +41,12 @@ Nos exemplos do Goals Tracker (`squads/goals-tracker/pipeline/data/jira-queries.
 
 O padrão é `NE`. Alguns documentos do repositório citam `N3`. **Não alteramos o default** para não quebrar quem já usa `NE`; se a chave real for `N3`, configure `JIRA_PROJECT_NE=N3`.
 
+### Story Points (vários `customfield_*`)
+
+O ID do campo de pontos **varia por instância** (e pode haver mais de um tipo de campo). No Jira, abra uma issue INTS/IOAM com pontos → **…** → exportar JSON e localize qual `customfield_*` traz o número. Use `JIRA_STORY_POINTS_FIELD` com um único ID ou **vários separados por vírgula**: o app usa o primeiro que tiver valor numérico na issue. No rodapé **JQL usada neste relatório** aparece a lista de IDs ativos.
+
+Se a **distribuição INTS+IOAM** continuar com SP zerados mas existirem issues no período, defina `JIRA_INTIOAM_SP_FIELDS=navigable` para que a busca use `*navigable` (algumas instâncias não devolvem o custom field pedido por ID no `search/jql`).
+
 ## Rodar
 
 ```bash
@@ -48,7 +56,13 @@ npm run dev
 
 Abra [http://localhost:3000](http://localhost:3000). Altere as datas no formulário e envie (GET) para recarregar o relatório.
 
-No rodapé da página, **“JQL usada neste relatório”** lista as consultas exatas do run (útil para comparar com `raw-metrics.md` do squad).
+O link **Sprint atual** (`?sprint=current`) lê `startDate`/`endDate` da API Agile e converte para **calendário** em `REPORT_DEFAULT_TIMEZONE` (não só a data UTC do prefixo ISO). Se a sprint do board que você usa for a do **IOAM**, defina `JIRA_ACTIVE_SPRINT_PROJECT=IOAM` para não pegar antes a sprint ativa só do INTS.
+
+No rodapé, **“JQL usada neste relatório”** lista as consultas do run e os **campos de Story Points** usados (útil para comparar com `raw-metrics.md` do squad).
+
+### Carregamento progressivo
+
+Diretoria, Gestão e Histórico são buscadas em **blocos independentes** com `Suspense`: a página envia o shell (cabeçalho, datas, links) e cada seção aparece quando o respectivo conjunto de chamadas ao Jira termina. O número total de requests pode ser similar ao modo monolítico; o ganho é principalmente **tempo até ver o primeiro bloco** e percepção de progresso (skeletons). Issues N3 do período são compartilhadas entre Diretoria e Gestão via `React.cache` no mesmo request.
 
 ## Build
 
@@ -75,7 +89,8 @@ npm start
 
 ## Estrutura
 
-- `app/page.tsx` — lê `searchParams`, chama `buildReport`
-- `lib/jira/*` — cliente HTTP, busca paginada, JQL
-- `lib/report/buildReport.ts` — agregações e DTO para a UI
+- `app/page.tsx` — valida período e credenciais; `Suspense` + blocos async (Diretoria / Gestão / Histórico)
+- `lib/jira/*` — cliente HTTP, busca paginada, JQL, `storyPoints.ts` (coerção de SP)
+- `lib/report/sectionLoaders.ts` — fetch por seção; `cachedFetchers.ts` + `React.cache` para N3
+- `lib/report/buildReport.ts` — agrega `loadFullReportData` (uso programático / testes)
 - `components/ProductivityChart.tsx` — Chart.js (cliente)

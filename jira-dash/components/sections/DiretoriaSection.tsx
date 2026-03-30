@@ -1,6 +1,6 @@
-import type { ReportDTO } from "@/lib/report/types";
+import type { DiretoriaSectionData } from "@/lib/report/types";
 
-type Props = { data: ReportDTO };
+type Props = { data: DiretoriaSectionData };
 
 export function DiretoriaSection({ data }: Props) {
   const sprintVal =

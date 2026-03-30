@@ -11,7 +11,7 @@ outputFile: squads/goals-tracker/output/review-notes.md
 
 Load these files before executing:
 - `squads/goals-tracker/output/leadership-report.md` — Relatório de liderança (arquivo principal do `inputFile` deste passo).
-- `squads/goals-tracker/output/leadership-report.html` — Deve obedecer ao layout canônico (`2026-03-26-112700`, um `progressChart` apenas); rejeitar se houver painel gestor / gráficos extras / seções A–E.
+- `squads/goals-tracker/output/leadership-report.html` — Layout canônico: `progressChart` + `frentes-table` + `w2h-table` (impedimentos); rejeitar se faltar frentes ou 5W2H, ou houver painel gestor / gráficos extras / A–E.
 - `squads/goals-tracker/output/team-report.md` — Relatório de time (mesmo diretório versionado do run que o leadership report).
 - `squads/goals-tracker/output/research-snapshot.md` — Verificação de fidelidade aos dados coletados.
 - `squads/goals-tracker/output/analysis-brief.md` — Verificação de coerência com RAG e bloqueios analisados.
@@ -24,7 +24,7 @@ Se o checkpoint anterior registrou notas do usuário no chat, incorpore-as como 
 
 ### Process
 1. **Leitura dupla:** Avalie leadership e team contra `quality-criteria.md`, seção por seção relevante (liderança vs time).
-1b. **Layout canônico (liderança):** Verificar `leadership-report.md` (quatro seções na ordem de `step-03-write.md`, sem Painel gestor / A–E) e `leadership-report.html` (espelho `2026-03-26-112700`). Violação → **REJECT** com must-fix.
+1b. **Layout canônico (liderança):** Verificar `leadership-report.md` (ordem em `step-03-write.md`, tabela **frentes** + tabela **5W2H** em Impedimentos) e `leadership-report.html` (gráfico único + `frentes-table` + `w2h-table`). Sem Painel gestor / A–E. Violação → **REJECT** com must-fix.
 2. **Checagem de dados:** Compare afirmações quantitativas e keys de issue com `research-snapshot.md` e com o `analysis-brief.md`; sinalize discrepâncias.
 3. **Anti-patterns:** Marque jargão proibido, métricas de vaidade, tom inadequado ou reconhecimentos genéricos.
 4. **Pontuação:** Atribua notas por dimensão e um veredito **APPROVE** ou **REJECT** (reject = exige correção no escritor antes de aprovação final humana).
@@ -105,7 +105,7 @@ VERDICT: APPROVE
 Reject and redo if ANY of these are true:
 1. O veredito é **APPROVE** apesar de haver must-fix de dados (número, key ou status) contraditórios ao `research-snapshot.md`.
 2. O arquivo `review-notes.md` não contém tabela de scores e veredito explícito **APPROVE** ou **REJECT**.
-3. O veredito é **APPROVE** enquanto `leadership-report.md` ou `leadership-report.html` viola o padrão fixo `2026-03-26-112700` / `step-03-write.md`.
+3. O veredito é **APPROVE** enquanto `leadership-report.md` ou `leadership-report.html` viola o padrão fixo `2026-03-26-112700` / `step-03-write.md` (incluindo ausência da tabela de frentes ou da tabela **5W2H** nos impedimentos).
 
 ## Quality Criteria
 

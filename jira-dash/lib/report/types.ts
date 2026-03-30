@@ -10,6 +10,13 @@ export type PivotRow = {
   total: number;
 };
 
+export type HistoricoBlock = {
+  months: HistoricoMonth[];
+  spPivot: PivotRow[];
+  alResolvedPivot: PivotRow[];
+  n3Pivot: PivotRow[];
+};
+
 export type JqlSnapshotItem = {
   id: string;
   label: string;
@@ -26,33 +33,40 @@ export type N3SlaSummary = {
   note: string | null;
 };
 
-export type ReportDTO = {
+export type DiretoriaSectionData = {
   period: { from: string; to: string };
   periodLabelBr: string;
   alCreatedTotal: number;
   alResolvedTotal: number;
-  alResolvedByAssignee: CountRow[];
-  alCreatedByPriority: CountRow[];
-  /** Soma de SP em sprint aberta INTS+IOAM; null se a consulta falhar. */
   sprintSpTotal: number | null;
   sprintSpNote: string | null;
-  /** N3 (NE) resolvidos no período pelo time (filtro squad); null se escopo N3 inativo. */
   n3ResolvedTeamTotal: number | null;
   n3Note: string | null;
-  n3ResolvedByAssignee: CountRow[];
-  intIoamSpCompletedByAssignee: SpRow[];
-  metaSpPerPerson: number;
-  /** JQL usada neste run (diff com raw-metrics.md). */
-  jqlUsed: JqlSnapshotItem[];
-  /** SLA created → resolution ≤ 48h, meta 50%. */
   n3Sla: N3SlaSummary | null;
-  historico: {
-    months: HistoricoMonth[];
-    spPivot: PivotRow[];
-    alResolvedPivot: PivotRow[];
-    n3Pivot: PivotRow[];
-  };
 };
+
+export type GestaoSectionData = {
+  alResolvedByAssignee: CountRow[];
+  alCreatedByPriority: CountRow[];
+  intIoamSpCompletedByAssignee: SpRow[];
+  /** Diagnóstico quando não há issues INTS+IOAM ou SP não foi lido dos campos. */
+  intIoamSpNote: string | null;
+  n3ResolvedByAssignee: CountRow[];
+  metaSpPerPerson: number;
+};
+
+export type HistoricoSectionData = {
+  historico: HistoricoBlock;
+};
+
+export type ReportDTO = DiretoriaSectionData &
+  GestaoSectionData & {
+    /** JQL usada neste run (diff com raw-metrics.md). */
+    jqlUsed: JqlSnapshotItem[];
+    /** Custom fields usados para somar Story Points (ordem de fallback). */
+    storyPointsFieldIds: string[];
+    historico: HistoricoBlock;
+  };
 
 export type ReportResult =
   | { ok: true; data: ReportDTO }

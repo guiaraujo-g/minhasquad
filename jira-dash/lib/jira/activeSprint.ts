@@ -1,17 +1,19 @@
-import { PROJECT_KEYS } from "../config";
-import { defaultTimezone, todayIsoInTimezone } from "../dates";
+import { activeSprintProjectQueryOrder } from "../config";
+import { agileInstantToLocalIsoDate, defaultTimezone, todayIsoInTimezone } from "../dates";
 import type { JiraClientConfig } from "./client";
 import { jiraFetchJson } from "./client";
 
 type BoardList = { values?: { id: number; type: string }[] };
 
 type SprintList = {
-  values?: { startDate?: string; endDate?: string; state: string }[];
+  values?: {
+    id?: number;
+    name?: string;
+    startDate?: string;
+    endDate?: string;
+    state: string;
+  }[];
 };
-
-function toIsoDate(d: string): string {
-  return d.length >= 10 ? d.slice(0, 10) : d;
-}
 
 /**
  * Descobre datas da sprint **ativa** (API Agile) em board scrum do projeto INTS ou IOAM.
@@ -20,7 +22,8 @@ function toIsoDate(d: string): string {
 export async function resolveActiveSprintRange(
   cfg: JiraClientConfig,
 ): Promise<{ from: string; to: string } | null> {
-  for (const projectKey of [PROJECT_KEYS.ints, PROJECT_KEYS.ioam] as const) {
+  const tz = defaultTimezone();
+  for (const projectKey of activeSprintProjectQueryOrder()) {
     try {
       const boards = await jiraFetchJson<BoardList>(
         cfg,
@@ -38,9 +41,9 @@ export async function resolveActiveSprintRange(
       const active = sprints.values?.[0];
       if (!active) continue;
 
-      const from = active.startDate ? toIsoDate(active.startDate) : null;
-      const endRaw = active.endDate ? toIsoDate(active.endDate) : null;
-      const today = todayIsoInTimezone(defaultTimezone());
+      const from = active.startDate ? agileInstantToLocalIsoDate(active.startDate, tz) : null;
+      const endRaw = active.endDate ? agileInstantToLocalIsoDate(active.endDate, tz) : null;
+      const today = todayIsoInTimezone(tz);
 
       if (from && endRaw) {
         return { from, to: endRaw };

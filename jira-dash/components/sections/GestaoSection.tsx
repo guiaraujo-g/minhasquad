@@ -1,8 +1,8 @@
 import { productivitySeriesForTeam } from "@/lib/chartSeries";
-import type { CountRow, ReportDTO, SpRow } from "@/lib/report/types";
+import type { CountRow, GestaoSectionData, SpRow } from "@/lib/report/types";
 import { ProductivityChart } from "../ProductivityChart";
 
-type Props = { data: ReportDTO };
+type Props = { data: GestaoSectionData };
 
 function totalCount(rows: CountRow[]): number {
   return rows.reduce((s, r) => s + r.count, 0);
@@ -114,6 +114,7 @@ export function GestaoSection({ data }: Props) {
         <ProductivityChart labels={labels} values={values} metaPerPerson={data.metaSpPerPerson} />
 
         <h3 className="section-h3">Distribuição de carga (Story Points · INTS+IOAM)</h3>
+        {data.intIoamSpNote ? <p className="stub-note">{data.intIoamSpNote}</p> : null}
         <SpDistributionTable rows={data.intIoamSpCompletedByAssignee} />
 
         <h3 className="section-h3">Tickets N3 resolvidos pelo time (período)</h3>

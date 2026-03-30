@@ -1,8 +1,16 @@
 import type { JqlSnapshotItem } from "@/lib/report/types";
 
-type Props = { items: JqlSnapshotItem[] };
+type Props = {
+  items: JqlSnapshotItem[];
+  storyPointsFieldIds: string[];
+};
 
-export function ReportJqlPanel({ items }: Props) {
+export function ReportJqlPanel({ items, storyPointsFieldIds }: Props) {
+  const spLine =
+    storyPointsFieldIds.length > 0
+      ? storyPointsFieldIds.join(", ")
+      : "(nenhum — ver JIRA_STORY_POINTS_FIELD)";
+
   return (
     <footer className="report-jql-footer">
       <details className="report-collapsible">
@@ -11,6 +19,10 @@ export function ReportJqlPanel({ items }: Props) {
         </summary>
         <p className="report-jql-intro">
           Copie e compare com o <code>raw-metrics.md</code> do squad (mesmo período e variáveis de ambiente).
+        </p>
+        <p className="report-jql-intro">
+          <strong>Campos de Story Points (ordem de fallback):</strong>{" "}
+          <code className="jql-inline-code">{spLine}</code>
         </p>
         <div className="jql-snapshot-list">
           {items.map((item) => (

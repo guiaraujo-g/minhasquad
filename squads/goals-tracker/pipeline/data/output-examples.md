@@ -1,6 +1,6 @@
 # Output Examples: Executive Reporting & Goal Tracking
 
-> **Estrutura obrigatória do relatório de liderança:** em todo run, o `.md` e o `.html` devem seguir o mesmo molde que `squads/goals-tracker/output/2026-03-26-112700/v1/leadership-report.*` — ver `pipeline/steps/step-03-write.md`. Não usar painel gestor nem seções A–E no markdown de liderança.
+> **Estrutura obrigatória do relatório de liderança:** em todo run, o `.md` e o `.html` devem seguir `2026-03-26-112700/v1/leadership-report.*` — incluindo **`## Andamento por frente (explícito)`** com tabela por frente de `squad-goals.md`. Ver `pipeline/steps/step-03-write.md`. Sem painel gestor nem seções A–E.
 
 ## Example 1: Leadership Report (markdown — headings exatos)
 
@@ -18,9 +18,17 @@
 - **Suporte integrado:** …
 - **Produtividade:** …
 
-## Impedimentos e decisões (Five Whats)
-1. **Título** — Bloqueado por …; impacto …; ideal: …
-2. …
+## Andamento por frente (explícito)
+
+| Frente | Peso / meta | Rastreio | Andamento no período |
+|--------|-------------|----------|----------------------|
+| … | … | … | … |
+
+## Impedimentos e decisões (Five Whats e 5W2H)
+
+| # | O quê | Por quê | Onde | Quando | Quem | Como | Quanto |
+|---|-------|---------|------|--------|------|------|--------|
+| 1 | … | … | … | … | … | … | … |
 
 ## Próximos passos recomendados (liderança)
 1. …
